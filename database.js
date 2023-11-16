@@ -1,4 +1,4 @@
-// for testing purpose
+// For testing 
 
 const { Sequelize, DataTypes } = require('sequelize');
 
