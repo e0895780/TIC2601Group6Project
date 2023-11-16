@@ -1,4 +1,4 @@
-// For testing 
+// For upload test
 
 const { Sequelize, DataTypes } = require('sequelize');
 
