@@ -56,7 +56,8 @@ const Contacts = sequelize.define('Contacts', {
     freezeTableName: true
 });
 
-const Opportunities = sequelize.define('Opportunities', {
+//Denny Opportunity Model (table)
+const Opportunity = sequelize.define('Opportunity', {
 
     Oid: {
         type: DataTypes.STRING,
@@ -96,24 +97,42 @@ const Opportunities = sequelize.define('Opportunities', {
     },
     OAmount: {
         type: DataTypes.FLOAT(11,2),
-        allowNull: true
+        allowNull: true,
         validate: {
             isGreaterThanZero(value) {
                 if(parseFloat(value) < 0) {
-                    throw new Error('Opportunity Amount must be 0 or more')
+                    throw new Error('Opportunity Amount must be 0 or more');
                 }
             }
         }  
     },
-    O
 }, {
     freezeTableName: true
 });
 
-Account.hasMany(Opportunities);
-Opportunities.belongsTo(Account);
+//Denny StageProability Model (table), for auto populating of probability when stage is chosen
+
+const StageProbability = sequelize.define('StageProbability', {
+    stage: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    probability: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+            min: 0,
+            max: 100,
+        }
+    }
+}, {
+    freezeTableName: true
+});
 
 
 sequelize.sync()
 
 console.log(Account);
+
+module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
