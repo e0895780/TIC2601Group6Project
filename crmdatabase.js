@@ -87,10 +87,24 @@ const Opportunity = sequelize.define('Opportunity', {
     Oclosedate: {
         type: DataTypes.DATE,
         allowNull: false,
+        validate: {
+            customValidator(value) {
+                if(new Date(value) < new Date()) {
+                    throw new Error("Estimated Close date cannot be past");
+                }
+            }
+        },
     },
     OAmount: {
         type: DataTypes.FLOAT(11,2),
         allowNull: true,
+        validate: {
+            isNonNegative(value) {
+                if(parseFloat(value) < 0) {
+                    throw new Error("Amount should be positive");
+                }
+            }
+        },
     }
 }, {
     freezeTableName: true
