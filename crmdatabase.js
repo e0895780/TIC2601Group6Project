@@ -7,8 +7,8 @@ const sequelize = new Sequelize(
     '', '', '',
     {
         dialect: 'sqlite',
-        // remember to change file path according to you folder
-        storage: './CRM_Database/CRM_database.db'
+        storage: './db/crmdatabase.db',
+        logging: false
     }
 );
 
@@ -100,19 +100,16 @@ const Opportunity = sequelize.define('Opportunity', {
 
 const StageProbability = sequelize.define('StageProbability', {
     stage: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        primaryKey: true,
-        validate: {
-            isIn: [['Qualification', 'Needs Analysis', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost']]
-        }
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
     },
     probability: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        validate: {
-            min: 0,
-            max: 100,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+        max: 100,
         }
     }
 }, {
@@ -121,11 +118,11 @@ const StageProbability = sequelize.define('StageProbability', {
 
 Opportunity.belongsTo(Account);
 Account.hasMany(Opportunity);
-StageProbability.belongsTo(Opportunity, { foreignKey: 'stage', targetKey: 'Ostage' });
+Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage' });
 
 
 //sequelize.sync()
 
 console.log(Account);
 
-module.exports = {sequelize, Account, Contacts, Opportunity};
+module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
