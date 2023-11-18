@@ -56,6 +56,62 @@ const Contacts = sequelize.define('Contacts', {
     freezeTableName: true
 });
 
+const Opportunities = sequelize.define('Opportunities', {
+
+    Oid: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false  
+    },
+    Oname: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    OParter: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    ODistributor: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    Ostage: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isIn: [['Pipeline', 'Best Case', 'Commit', 'Closed Won', 'Closed Lost']]
+        }
+    },
+    Oclosedate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+            customValidator(value) {
+                if(new Data(value <= new Date())) {
+                    throw new Error("Invalid Opportunity Close Date")
+                }
+            }
+        }
+    },
+    OAmount: {
+        type: DataTypes.FLOAT(11,2),
+        allowNull: true
+        validate: {
+            isGreaterThanZero(value) {
+                if(parseFloat(value) < 0) {
+                    throw new Error('Opportunity Amount must be 0 or more')
+                }
+            }
+        }  
+    },
+    O
+}, {
+    freezeTableName: true
+});
+
+Account.hasMany(Opportunities);
+Opportunities.belongsTo(Account);
 
 
 sequelize.sync()
