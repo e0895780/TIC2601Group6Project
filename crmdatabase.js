@@ -12,7 +12,7 @@ const sequelize = new Sequelize(
     }
 );
 
-// Account model (table)
+// ZQ  Account model (table)
 const Account = sequelize.define('Account', {
 
     AID: {
@@ -33,7 +33,7 @@ const Account = sequelize.define('Account', {
     freezeTableName: true
 });
 
-// Contacts model (table)
+// ZQ Contacts model (table)
 const Contacts = sequelize.define('Contacts', {
 
     Cfname: {
@@ -130,13 +130,25 @@ const StageProbability = sequelize.define('StageProbability', {
     freezeTableName: true
 });
 
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<-----------------  Below this line is for association of each entity ------------------------------------>>>>>>>>>>>>>>>>>
+
+
+// 1-N relationship for Account table and contact table
+Account.hasMany(Contacts);
+Contacts.belongsTo(Account)
+
+
+
+
 Opportunity.belongsTo(Account);
 Account.hasMany(Opportunity);
 Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage' });
 
 
+
 //sequelize.sync()
 
-console.log(Account);
+// console.log(Account);
 
 module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
