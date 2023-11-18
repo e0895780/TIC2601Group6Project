@@ -60,7 +60,7 @@ const Contacts = sequelize.define('Contacts', {
 const Opportunity = sequelize.define('Opportunity', {
 
     Oid: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false  
@@ -81,31 +81,17 @@ const Opportunity = sequelize.define('Opportunity', {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            isIn: [['Pipeline', 'Best Case', 'Commit', 'Closed Won', 'Closed Lost']]
-        }
+            isIn: [['Pipeline', 'Best Case', 'Negotiation', 'Commit', 'Closed Won', 'Closed Lost']]
+        },
     },
     Oclosedate: {
         type: DataTypes.DATE,
         allowNull: false,
-        validate: {
-            customValidator(value) {
-                if(new Data(value <= new Date())) {
-                    throw new Error("Invalid Opportunity Close Date")
-                }
-            }
-        }
     },
     OAmount: {
         type: DataTypes.FLOAT(11,2),
         allowNull: true,
-        validate: {
-            isGreaterThanZero(value) {
-                if(parseFloat(value) < 0) {
-                    throw new Error('Opportunity Amount must be 0 or more');
-                }
-            }
-        }  
-    },
+    }
 }, {
     freezeTableName: true
 });
@@ -117,6 +103,9 @@ const StageProbability = sequelize.define('StageProbability', {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+            isIn: [['Pipeline', 'Best Case', 'Negotiation', 'Commit', 'Closed Won', 'Closed Lost']]
+        }
     },
     probability: {
         type: DataTypes.FLOAT,
@@ -130,9 +119,12 @@ const StageProbability = sequelize.define('StageProbability', {
     freezeTableName: true
 });
 
+Opportunity.belongsTo(Account);
+Account.hasMany(Opportunity);
+
 
 sequelize.sync()
 
 console.log(Account);
 
-module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
+module.exports = {sequelize, Account, Contacts, Opportunity};
