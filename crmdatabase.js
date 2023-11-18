@@ -69,11 +69,11 @@ const Opportunity = sequelize.define('Opportunity', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    OParter: {
+    Oparter: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    ODistributor: {
+    Odistributor: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -95,7 +95,7 @@ const Opportunity = sequelize.define('Opportunity', {
             }
         },
     },
-    OAmount: {
+    Oamount: {
         type: DataTypes.FLOAT(11,2),
         allowNull: true,
         validate: {
