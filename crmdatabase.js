@@ -81,7 +81,7 @@ const Opportunity = sequelize.define('Opportunity', {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            isIn: [['Pipeline', 'Best Case', 'Negotiation', 'Commit', 'Closed Won', 'Closed Lost']]
+            isIn: [['Qualification', 'Needs Analysis', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost']]
         },
     },
     Oclosedate: {
@@ -102,9 +102,9 @@ const StageProbability = sequelize.define('StageProbability', {
     stage: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        primaryKey: true,
         validate: {
-            isIn: [['Pipeline', 'Best Case', 'Negotiation', 'Commit', 'Closed Won', 'Closed Lost']]
+            isIn: [['Qualification', 'Needs Analysis', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost']]
         }
     },
     probability: {
@@ -121,9 +121,10 @@ const StageProbability = sequelize.define('StageProbability', {
 
 Opportunity.belongsTo(Account);
 Account.hasMany(Opportunity);
+StageProbability.belongsTo(Opportunity, { foreignKey: 'stage', targetKey: 'Ostage' });
 
 
-sequelize.sync()
+//sequelize.sync()
 
 console.log(Account);
 
