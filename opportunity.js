@@ -42,18 +42,18 @@ router.route('/')
         var Oclosedate = req.body.Oclosedate;
         var Oamount = req.body.Oamount;
         
-        crmdatabase.Opportunity.findByPk(Oid).then((oid) => {
-            if(oid === null) {
+        crmdatabase.Opportunity.findByPk(Oid).then((opportunity) => {
+            if(opportunity === null) {
                 res.sendStatus(400);
             }
             else {
-                oid.Oname = Oname;
-                oid.Opartner = Opartner;
-                oid.Odistributor = Odistributor;
-                oid.Ostage = Ostage;
-                oid.Oclosedate = Oclosedate;
-                oid.Oamount = Oamount;
-                oid.save().then(() => {
+                opportunity.Oname = Oname;
+                opportunity.Opartner = Opartner;
+                opportunity.Odistributor = Odistributor;
+                opportunity.Ostage = Ostage;
+                opportunity.Oclosedate = Oclosedate;
+                opportunity.Oamount = Oamount;
+                opportunity.save().then(() => {
                     res.sendStatus(200);
                 })
             }
@@ -64,16 +64,16 @@ router.route('/')
 
         var Oid = req.query.Oid;
 
-        crmdatabase.Opportunity.findByPk(Oid).then((oid) => {
-            if(oid === null) {
+        crmdatabase.Opportunity.findByPk(Oid).then((opportunity) => {
+            if(opportunity === null) {
                 res.sendStatus(400);
             }
             else {
-                oid.destroy().then(() => {
+                opportunity.destroy().then(() => {
                     res.sendStatus(200);
                 })
             }
         })
     });
 
-    module.exports = router
+module.exports = router

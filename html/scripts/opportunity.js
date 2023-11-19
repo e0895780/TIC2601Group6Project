@@ -96,7 +96,7 @@ function createUpdateOpportunity()
     var Ostage = document.getElementById('Ostage').value;
     var Oclosedate = document.getElementById('Oclosedate').value;
     var Oamount = document.getElementById('Oamount').value;
-    var opportunity = {'Oid': Oid, 'Oname': Oname, 'Opartner': Opartner, 'Odistributor': Odistributor, 'Ostage': Ostage, 'Oclosedate': Oclosedate, 'Oamount': Oamount};
+    var opportunity = {'Oid':Oid, 'Oname':Oname, 'Opartner':Opartner, 'Odistributor':Odistributor, 'Ostage':Ostage, 'Oclosedate':Oclosedate, 'Oamount':Oamount};
 
     const req = new XMLHttpRequest();
     req.addEventListener('load', renderOpportunitiesTable);
