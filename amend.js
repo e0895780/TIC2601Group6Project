@@ -1,0 +1,92 @@
+// >>>>>>>>>>>>>>>>>>>>>>>> This JS file used for Generte, Read, update, delete in the database <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+const express = require('express')
+const sqlite3 = require('sqlite3')
+const { Sequelize, Op, Model, DataTypes } = require('sequelize');
+
+const crmdatabase = require('./crmdatabase');
+
+const router = express.Router()
+
+router.route('/')
+
+// read all the data in the database
+
+    .get((req,res) => {
+        console.log('GET: /account');
+
+        crmdatabase.Account.findAll().then((accounts) => {
+            res.send(accounts);
+        })
+    })
+
+// generate new account 
+
+    .put((req,res) => {
+        console.log('PUT: /account');
+
+        var AID = req.body.AID;
+        var Aname = req.body.Aname;
+        var Atype = req.body.Atype;
+
+        crmdatabase.Account.create({AID: AID, Aname: Aname, Atype: Atype}).then(() => {
+            res.sendStatus(200);
+        }).catch(()=>{
+            res.sendStatus(400);
+        })
+    })
+
+// update the account -- need to include more line of code to update other detail not only account detail
+
+    .post((req, res) =>{
+        console.log('POST: /account');
+
+        var AID = req.body.AID;
+        var Aname = req.body.Aname;
+        var Atype = req.body.Atype;
+
+        crmdatabase.Account.findByPk(AID).then((account) =>{
+            if (account === null){
+                res.sendStatus(404);
+            }
+            else{
+                account.AID = AID;
+                account.Aname = Aname;
+                account.Atype = Atype;
+                account.save().then(() =>{
+                    res.sendStatus(200);
+                })
+            }
+        })
+
+    })
+
+// delete the account
+
+    .delete((req,res) => {
+        console.log('DELETE: /account?AID=' + req.query.AID);
+
+        var AID = req.query.AID;
+
+        crmdatabase.Account.findByPk(AID,{
+            include: [
+                {model: crmdatabase.Contacts},
+                {model:crmdatabase.Opportunity},
+
+                // add more table, so that once the account is deleted, all other information under this account will also be delete
+            ],
+
+        }).then((account) => {
+            if (account === null){
+                res.sendStatus(404);
+            }
+            else{
+                // include more in square bracket to destory all item relate to the account id
+                account.destroy({include: [crmdatabase.Contacts, crmdatabase.Opportunity]}).then(() =>{
+                    res.sendStatus(200);
+                })
+            }
+        })
+    })
+
+module.exports = router
