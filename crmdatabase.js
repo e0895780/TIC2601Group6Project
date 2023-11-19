@@ -69,7 +69,7 @@ const Opportunity = sequelize.define('Opportunity', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    Oparter: {
+    Opartner: {
         type: DataTypes.STRING,
         allowNull: true
     },

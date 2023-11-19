@@ -19,13 +19,13 @@ router.route('/')
 
         var Oid = req.body.Oid;
         var Oname = req.body.Oname;
-        var Oparter = req.body.Oparter;
+        var Opartner = req.body.Opartner;
         var Odistributor = req.body.Odistributor;
         var Ostage = req.body.Ostage;
         var Oclosedate = req.body.Oclosedate;
         var Oamount = req.body.Oamount;
 
-        crmdatabase.Opportunity.create({Oid: Oid, Oname: Oname, Oparter: Oparter, Odistributor: Odistributor, Ostage: Ostage, Oclosedate: Oclosedate, Oamount: Oamount}).then(() => {
+        crmdatabase.Opportunity.create({Oid: Oid, Oname: Oname, Opartner: Opartner, Odistributor: Odistributor, Ostage: Ostage, Oclosedate: Oclosedate, Oamount: Oamount}).then(() => {
             res.sendStatus(200);
         }).catch(() => {
             res.sendStatus(400);
@@ -36,7 +36,7 @@ router.route('/')
 
         var Oid = req.body.Oid;
         var Oname = req.body.Oname;
-        var Oparter = req.body.Oparter;
+        var Opartner = req.body.Opartner;
         var Odistributor = req.body.Odistributor;
         var Ostage = req.body.Ostage;
         var Oclosedate = req.body.Oclosedate;
@@ -48,7 +48,7 @@ router.route('/')
             }
             else {
                 oid.Oname = Oname;
-                oid.Oparter = Oparter;
+                oid.Opartner = Opartner;
                 oid.Odistributor = Odistributor;
                 oid.Ostage = Ostage;
                 oid.Oclosedate = Oclosedate;
