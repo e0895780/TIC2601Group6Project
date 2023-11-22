@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Account</title>
+        <script type="text/javascript" src="scripts/account.js"></script>
+    </head>
+    <body onload="renderAccountsTable()">
+        <h1>
+            Account
+            <!-- HTML5 -->            
+        </h1>
+        <p>
+            <h2>Create/Update Account</h2>
+            <form id="accountForm" onsubmit="return createUpdateAccount()">
+                <table border="1" width="100%">
+                    <tbody>
+                        <tr>
+                            <td width="20%"><b>AID</b></td>
+                            <!-- HTML5 -->
+                            <td width="80%"><input type="text" placeholder="Enter book id" required="true" id="Bid" name="Bid" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Aname</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="text" placeholder="Enter book name" required="true" id="Bname" name="Bname" style="width: 300px"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Atype</b></td>
+                            <td>
+                                <!-- HTML5 -->
+                                <input type="date" id="Bpd" name="Bpd" required="true" min="1990-01-01" max="2023-10-01" />
+                            </td>
+                        </tr>
+ 
+                        <tr>
+                            <td colspan="2" style="text-align: center;"><input type="reset" value="Clear" /> <input type="submit" value="Create/Update" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </p>
+        <hr />
+        <p>
+            <h2>View All Accounts</h2>
+            <table id="accountsTable" border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>AID</th>
+                        <th>Aname</th>
+                        <th>Atype</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </p>
+        <hr />
+        <p>
+            <a href="./index.html">Home</a>
+        </p>
+    </body>
+</html>

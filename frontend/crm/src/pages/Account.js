@@ -1,35 +1,59 @@
-import { useState } from 'react';
-import { Link,useHistory } from "react-router-dom";
+import { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from "react-router-dom";
+
+import { AccountToEditContext } from '../contexts/AccountToEditContext';
 
 import InputAID from "../components/InputAID"
 import InputAname from "../components/InputAname"
 import InputAtype from "../components/InputAtype"
 
+axios.defaults.headers.put['Content-Type'] = 'application/json';
 
-function InputFormAccount({ editMode, setEditMode, accounts, setAccounts,
-    AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit }) {
+// editMode, setEditMode, accounts, setAccounts,AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit
+
+
+function InputFormAccount() {
+
+    const{
+        editMode, setEditMode, 
+        accounts, setAccounts,
+        AIDToEdit, setAIDToEdit, 
+        AnameToEdit, setAnameToEdit, 
+        AtypeToEdit, setAtypeToEdit,
+        reloadAccounts, setReloadAccounts
+    } = useContext(AccountToEditContext);
+
+    function resetInputState() {
+        setAIDToEdit('')
+        setAnameToEdit('')
+        setAtypeToEdit('')
+    }
 
     function processForm() {
 
-        console.log('InputFormAccount: processForm')
 
         if (editMode === 'create') {
 
             var newAccount = { 'AID': AIDToEdit, 'Aname': AnameToEdit, 'Atype': AtypeToEdit }
-            setAccounts(accounts.concat([newAccount]));
+            axios.put('http://localhost:3001/account',newAccount).then((response)=>{
+                resetInputState();
+                setReloadAccounts(!reloadAccounts)
+            })
+            
         }
         else if (editMode === 'edit') {
 
-            var account = accounts.find(account => account.AID === AIDToEdit)
-            account.AID = AIDToEdit
-            account.Aname = AnameToEdit
-            account.Atype = AtypeToEdit
-            setEditMode('create')
+            var accountToEdit = {'AID':AIDToEdit,'Aname':AnameToEdit,'Atype':AtypeToEdit}
+            axios.post('http://localhost:3001/account',accountToEdit).then((response)=>{
+                resetInputState();
+                setReloadAccounts(!reloadAccounts)
+                setEditMode('create')
+            })
+
         }
 
-        setAIDToEdit('')
-        setAnameToEdit('')
-        setAtypeToEdit('')
+
     }
 
     return (
@@ -70,40 +94,37 @@ function InputFormAccount({ editMode, setEditMode, accounts, setAccounts,
 }
 // editMode, setEditMode, contacts, setContacts, AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit
 
-function TableRowsAccounts({ editMode, setEditMode, accounts, setAccounts,
-    AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit }) {
+function TableRowsAccounts() {
+    const{
+        editMode, setEditMode, 
+        accounts, setAccounts,
+        AIDToEdit, setAIDToEdit, 
+        AnameToEdit, setAnameToEdit, 
+        AtypeToEdit, setAtypeToEdit,
+        reloadAccounts, setReloadAccounts
+    } = useContext(AccountToEditContext);
 
-    // const history = useHistory();
+    useEffect(
+        () => {
+            axios.get('http://localhost:3001/account').then((response) => {
+                setAccounts(response.data);
+            })
+        }, [reloadAccounts]
+    )
 
     function updateAccount(event, AID) {
         setEditMode('edit')
-        console.log('Editing ' + AID)
 
         var account = accounts.find(account => account.AID === AID)
         setAIDToEdit(account.AID)
         setAnameToEdit(account.Aname)
         setAtypeToEdit(account.Atype)
-
-    //     history.push({
-    //         pathname: "/Contact",
-    //         state:{
-    //             editMode: "updateContact",
-    //             contactInfo:{
-    //                 AID: account.AID,
-    //                 Cfname: account.Cfname,
-    //                 CLname: account.CLname,
-    //                 Caddress: account.Caddress,
-    //                 Cemail: account.Cemail,
-    //                 Cnumber: account.Cnumber,
-    //             }
-    //         }
-    //     })
     }
 
     function deleteAccount(event, AID) {
-        setAccounts(accounts.filter(account =>
-            account.AID !== AID
-        ))
+        axios.delete('http://localhost:3001/account', { params: { 'AID': AID } }).then((response) => {
+            setReloadAccounts(!reloadAccounts)
+        })
     }
 
     return (
@@ -124,8 +145,7 @@ function TableRowsAccounts({ editMode, setEditMode, accounts, setAccounts,
 }
 
 
-function TableAccounts({ editMode, setEditMode, accounts, setAccounts,
-    AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit }) {
+function TableAccounts() {
 
     return (
         <>
@@ -141,10 +161,7 @@ function TableAccounts({ editMode, setEditMode, accounts, setAccounts,
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRowsAccounts editMode={editMode} setEditMode={setEditMode} accounts={accounts} setAccounts={setAccounts}
-                        AIDToEdit={AIDToEdit} setAIDToEdit={setAIDToEdit}
-                        AnameToEdit={AnameToEdit} setAnameToEdit={setAnameToEdit}
-                        AtypeToEdit={AtypeToEdit} setAtypeToEdit={setAtypeToEdit} />
+                    <TableRowsAccounts />
                 </tbody>
             </table>
         </>
@@ -160,26 +177,31 @@ export default function Account() {
     const [AnameToEdit, setAnameToEdit] = useState('')
     const [AtypeToEdit, setAtypeToEdit] = useState('')
 
+    const [reloadAccounts, setReloadAccounts] = useState(true)
 
     return (
         <>
-            <div className="row" style={{ width: '100%' }}>
-                <div style={{ width: '100%', float: 'left' }}>
-                    <h2 style={{ marginTop: '0px' }}>Account</h2>
+            <AccountToEditContext.Provider value={{
+                editMode, setEditMode,
+                accounts, setAccounts,
+                AIDToEdit, setAIDToEdit,
+                AnameToEdit, setAnameToEdit,
+                AtypeToEdit, setAtypeToEdit,
+                reloadAccounts, setReloadAccounts
+            }}>
+
+                <div className="row" style={{ width: '100%' }}>
+                    <div style={{ width: '100%', float: 'left' }}>
+                        <h2 style={{ marginTop: '0px' }}>Book</h2>
+                    </div>
                 </div>
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <InputFormAccount editMode={editMode} setEditMode={setEditMode} accounts={accounts} setAccounts={setAccounts}
-                    AIDToEdit={AIDToEdit} setAIDToEdit={setAIDToEdit}
-                    AnameToEdit={AnameToEdit} setAnameToEdit={setAnameToEdit}
-                    AtypeToEdit={AtypeToEdit} setAtypeToEdit={setAtypeToEdit}/>
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <TableAccounts editMode={editMode} setEditMode={setEditMode} accounts={accounts} setAccounts={setAccounts}
-                    AIDToEdit={AIDToEdit} setAIDToEdit={setAIDToEdit}
-                    AnameToEdit={AnameToEdit} setAnameToEdit={setAnameToEdit}
-                    AtypeToEdit={AtypeToEdit} setAtypeToEdit={setAtypeToEdit}/>
-            </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <InputFormAccount />
+                </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <TableAccounts />
+                </div>
+            </AccountToEditContext.Provider>
         </>
     )
 };
