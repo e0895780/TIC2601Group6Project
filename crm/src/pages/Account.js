@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 
 import InputAID from "../components/InputAID"
 import InputAname from "../components/InputAname"
@@ -68,9 +68,12 @@ function InputFormAccount({ editMode, setEditMode, accounts, setAccounts,
         </>
     )
 }
+// editMode, setEditMode, contacts, setContacts, AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit
 
 function TableRowsAccounts({ editMode, setEditMode, accounts, setAccounts,
     AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit }) {
+
+    // const history = useHistory();
 
     function updateAccount(event, AID) {
         setEditMode('edit')
@@ -80,6 +83,21 @@ function TableRowsAccounts({ editMode, setEditMode, accounts, setAccounts,
         setAIDToEdit(account.AID)
         setAnameToEdit(account.Aname)
         setAtypeToEdit(account.Atype)
+
+    //     history.push({
+    //         pathname: "/Contact",
+    //         state:{
+    //             editMode: "updateContact",
+    //             contactInfo:{
+    //                 AID: account.AID,
+    //                 Cfname: account.Cfname,
+    //                 CLname: account.CLname,
+    //                 Caddress: account.Caddress,
+    //                 Cemail: account.Cemail,
+    //                 Cnumber: account.Cnumber,
+    //             }
+    //         }
+    //     })
     }
 
     function deleteAccount(event, AID) {
@@ -97,6 +115,7 @@ function TableRowsAccounts({ editMode, setEditMode, accounts, setAccounts,
                         <td>
                             <Link onClick={event => updateAccount(event, account.AID)}>Update</Link> |
                             <Link onClick={event => deleteAccount(event, account.AID)}>Delete</Link>
+                            {/* <Link onClick={event => updateContact(event, account.AID)}>Update Contact</Link> */}
                         </td>
                     </tr>
             )}
@@ -132,7 +151,7 @@ function TableAccounts({ editMode, setEditMode, accounts, setAccounts,
     )
 }
 
-export default function Book() {
+export default function Account() {
 
     const [editMode, setEditMode] = useState('create')
     const [accounts, setAccounts] = useState([]);
