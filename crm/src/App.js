@@ -20,6 +20,7 @@ function App() {
           <Route path="Account" element={<Account />} />
           <Route path="Contact" element={<Contact />} />
           <Route path="Opportunity" element={<Opportunity />} />
+          <Route path="quotation" element={<quotation />} />
         </Route>
       </Routes>
     </BrowserRouter>
