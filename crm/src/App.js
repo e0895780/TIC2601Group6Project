@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./pages/Layout";
 import Index from "./pages/Index";
+import Account from "./pages/Account";
 import Opportunity from "./pages/Opportunity";
 
 import './App.css';
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Index />} />
           <Route path="Index" element={<Index />} />
+          <Route path="Account" element={<Account />} />
           <Route path="Opportunity" element={<Opportunity />} />
         </Route>
       </Routes>

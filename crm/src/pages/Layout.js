@@ -15,6 +15,7 @@ function NavMenu() {
             <ul>
                 <li><Link to='/Opportunity'>Opportunity</Link></li>
                 <li><Link to='/Account'>Account</Link></li>
+                <li><Link to='/Contact'>Contact</Link></li>
                 <li><Link to='/Order'>Order</Link></li>
             </ul>
         </div>

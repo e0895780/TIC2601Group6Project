@@ -1,4 +1,5 @@
 // >>>>>>>>>>>>>>>>>>>>>>>> This JS file used for Generte, Read, update, delete in the database <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// create update account
 
 const express = require('express')
 const sqlite3 = require('sqlite3')
@@ -10,8 +11,7 @@ const router = express.Router()
 
 router.route('/')
 
-// read all the data in the database
-
+    // read all the data in the database
     .get((req,res) => {
         console.log('GET: /account');
 
@@ -20,8 +20,7 @@ router.route('/')
         })
     })
 
-// generate new account 
-
+    // generate new account 
     .put((req,res) => {
         console.log('PUT: /account');
 
@@ -36,8 +35,7 @@ router.route('/')
         })
     })
 
-// update the account -- need to include more line of code to update other detail not only account detail
-
+    // update the account 
     .post((req, res) =>{
         console.log('POST: /account');
 
@@ -61,32 +59,23 @@ router.route('/')
 
     })
 
-// delete the account
-
-    .delete((req,res) => {
+    // delete the account
+    .delete((req, res) => {
         console.log('DELETE: /account?AID=' + req.query.AID);
 
         var AID = req.query.AID;
 
-        crmdatabase.Account.findByPk(AID,{
-            include: [
-                {model: crmdatabase.Contacts},
-                {model:crmdatabase.Opportunity},
-
-                // add more table, so that once the account is deleted, all other information under this account will also be delete
-            ],
-
-        }).then((account) => {
-            if (account === null){
+        models.Account.findByPk(AID).then((account) => {
+            if (account === null) {
                 res.sendStatus(404);
             }
-            else{
-                // include more in square bracket to destory all item relate to the account id
-                account.destroy({include: [crmdatabase.Contacts, crmdatabase.Opportunity]}).then(() =>{
+            else {
+                account.destroy().then(() => {
                     res.sendStatus(200);
                 })
             }
         })
-    })
+    });
+
 
 module.exports = router
