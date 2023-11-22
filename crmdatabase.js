@@ -151,8 +151,8 @@ Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage
 
 
 
-//sequelize.sync()
+sequelize.sync()
 
-// console.log(Account);
+console.log(Account);
 
 module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
