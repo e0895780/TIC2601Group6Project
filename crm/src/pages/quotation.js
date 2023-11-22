@@ -10,6 +10,13 @@ import InputQDiscount from "../components/InputQDiscount"
 import InputQOrderDate from "../components/InputQOrderDate"
 import InputQStatus from "../components/InputQStatus"
 
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////Provides a form for creating and updating quotations./////////////////////////////////////////////////////////////
 function InputFormQuotation({ editMode, setEditMode, quotation, setquotation,
     OrderIDToEdit, setOrderIDToEdit, ProductNameToEdit, setProductNameToEdit, ClientToEdit, setClientToEdit, PriceToEdit, setPriceToEdit, 
     QuantityToEdit, setQuantityToEdit, DiscountToEdit, setDiscountToEdit, OrderDateToEdit, setOrderDateToEdit, StatusToEdit, setStatusToEdit }) {
@@ -26,15 +33,15 @@ function InputFormQuotation({ editMode, setEditMode, quotation, setquotation,
         }
         else if (editMode === 'edit') {
 
-            var quoatation = quoatation.find(quotation => quotation.OrderID === OrderIDToEdit)
-            quoatation.OrderID = OrderIDToEdit
-            quoatation.ProductName = ProductNameToEdit
-            quoatation.Client = ClientToEdit
-            quoatation.Price = PriceToEdit
-            quoatation.Quantity = QuantityToEdit
-            quoatation.Discount = DiscountToEdit
-            quoatation.OrderDate = OrderDateToEdit
-            quoatation.Status = StatusToEdit
+            var quotation = quotation.find(quotation => quotation.OrderID === OrderIDToEdit)
+            quotation.OrderID = OrderIDToEdit
+            quotation.ProductName = ProductNameToEdit
+            quotation.Client = ClientToEdit
+            quotation.Price = PriceToEdit
+            quotation.Quantity = QuantityToEdit
+            quotation.Discount = DiscountToEdit
+            quotation.OrderDate = OrderDateToEdit
+            quotation.Status = StatusToEdit
 
             setEditMode('create')
         }
@@ -58,49 +65,49 @@ function InputFormQuotation({ editMode, setEditMode, quotation, setquotation,
                     <tr>
                         <td width={'20%'}><b>Oid</b></td>
                         <td>
-                            <InputId label='OrderID' value={OrderIDToEdit} setValue={setOrderIDToEdit} />
+                            <InputQOrid label='OrderID' value={OrderIDToEdit} setValue={setOrderIDToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>ProductName</b></td>
                         <td>
-                            <InputName label='ProductName' value={ProductNameToEdit} setValue={setProductNameToEdit} />
+                            <InputQProductName label='ProductName' value={ProductNameToEdit} setValue={setProductNameToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Client</b></td>
                         <td>
-                            <InputName label='Client' value={ClientToEdit} setValue={setClientToEdit} />
+                            <InputQClient label='Client' value={ClientToEdit} setValue={setClientToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Price</b></td>
                         <td>
-                            <InputName label='Price' value={PriceToEdit} setValue={setPriceToEdit} />
+                            <InputQPrice label='Price' value={PriceToEdit} setValue={setPriceToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Quantity</b></td>
                         <td>
-                            <InputName label='Quantity' value={QuantityToEdit} setValue={setQuantityToEdit} />
+                            <InputQQuantity label='Quantity' value={QuantityToEdit} setValue={setQuantityToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Discount</b></td>
                         <td>
-                            <InputName label='Discount' value={DiscountToEdit} setValue={setDiscountToEdit} />
+                            <InputQDiscount label='Discount' value={DiscountToEdit} setValue={setDiscountToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>OrderDate</b></td>
                         <td>
-                            <InputDate minDate='1990-01-01' maxDate='2050-12-31' value={OrderDateToEdit} setValue={setOrderDateToEdit} />
+                            <InputQOrderDate minDate='1990-01-01' maxDate='2050-12-31' value={OrderDateToEdit} setValue={setOrderDateToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Status</b></td>
                         <td>
-                            <InputAmount value={StatusToEdit} setValue={setStatusToEdit} />
+                            <InputQStatus value={StatusToEdit} setValue={setStatusToEdit} />
                         </td>
                     </tr>
                     <tr>
@@ -115,6 +122,15 @@ function InputFormQuotation({ editMode, setEditMode, quotation, setquotation,
     )
 }
 
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////Generates rows in the quotations table/////////////////////////////////////////////////////////////
 function TableRowsQuotation({ editMode, setEditMode, quotation, setquotation,
     OrderIDToEdit, setOrderIDToEdit, ProductNameToEdit, setProductNameToEdit, ClientToEdit, setClientToEdit, PriceToEdit, setPriceToEdit, 
     QuantityToEdit, setQuantityToEdit, DiscountToEdit, setDiscountToEdit, OrderDateToEdit, setOrderDateToEdit, StatusToEdit, setStatusToEdit}) {
@@ -158,6 +174,12 @@ function TableRowsQuotation({ editMode, setEditMode, quotation, setquotation,
 }
 
 
+
+
+
+
+
+/////////////////////////////////////////////////////////////Displays the quotations table header and utilizes TableRowsQuotation to render the rows/////////////////////////////////////////////////////////////
 function TableQuotation({ editMode, setEditMode, quotation, setquotation,
     OrderIDToEdit, setOrderIDToEdit, ProductNameToEdit, setProductNameToEdit, ClientToEdit, setClientToEdit, PriceToEdit, setPriceToEdit, 
     QuantityToEdit, setQuantityToEdit, DiscountToEdit, setDiscountToEdit, OrderDateToEdit, setOrderDateToEdit, StatusToEdit, setStatusToEdit }) {
@@ -195,6 +217,12 @@ function TableQuotation({ editMode, setEditMode, quotation, setquotation,
         </>
     )
 }
+
+
+
+
+
+
 
 export default function quotation() {
 
