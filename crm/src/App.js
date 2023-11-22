@@ -6,6 +6,7 @@ import Index from "./pages/Index";
 import Account from "./pages/Account";
 import Contact from "./pages/Contact";
 import Opportunity from "./pages/Opportunity";
+import quotation from "./pages/quotation";
 
 import './App.css';
 
