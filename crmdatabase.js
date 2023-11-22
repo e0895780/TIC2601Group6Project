@@ -134,6 +134,64 @@ const StageProbability = sequelize.define('StageProbability', {
     freezeTableName: true
 });
 
+//JiaXing Quotation Model (table)
+const quotation = sequelize.define('quotation', {
+
+    OrderID: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false  
+    },
+    ProductName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    Client: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    Price: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    Quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    Discount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+    },
+    Status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isIn: [['Active', 'Inactive']]
+        },
+    },
+    OrderDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    DealPrice: {
+        type: DataTypes.INTEGER,
+        get() {
+            // Calculate the 'DealPrice' by multiplying 'Price' and 'Discount'
+            return this.getDataValue('Price') * this.getDataValue('Discount');
+        },
+    },
+    TotalPrice: {
+        type: DataTypes.INTEGER,
+        get() {
+            // Calculate the 'TotalPrice' by multiplying 'DealPrice' and 'Quantity'
+            return this.getDataValue('DealPrice') * this.getDataValue('Quantity');
+        },
+    },
+}, {
+    freezeTableName: true
+});
+
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<-----------------  Below this line is for association of each entity ------------------------------------>>>>>>>>>>>>>>>>>
 
@@ -149,7 +207,13 @@ Opportunity.belongsTo(Account);
 Account.hasMany(Opportunity);
 Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage' });
 
+// 1-N relationship for Oppotunity table and quotation table
+Opportunity.hasMany(quotation);
+quotation.belongsTo(Opportunity);
 
+//1-N relationship for quotation table and Product table
+quotation.hasMany(Product);
+Product.belongsTo(quotation);
 
 sequelize.sync()
 
