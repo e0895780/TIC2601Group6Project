@@ -51,6 +51,10 @@ const Contacts = sequelize.define('Contacts', {
     Cemail: {
         type: DataTypes.STRING,
         allowNull: false  
+    },
+    Cnumber: {
+        type: DataTypes.STRING,
+        allowNull: false  
     }
 }, {
     freezeTableName: true
