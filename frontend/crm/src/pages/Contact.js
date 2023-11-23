@@ -5,12 +5,12 @@ import { useLocation } from 'react-router-dom';
 
 import { ContactToEditContext } from '../contexts/ContactToEditContext';
 
-import InputAccountAID from "../components/InputAccountAID"
-import InputCfname from "../components/InputCfname"
-import InputCLname from "../components/InputCLname"
-import InputCaddress from "../components/InputCaddress"
-import InputCemail from "../components/InputCemail"
-import InputCnumber from "../components/InputCnumber"
+import InputAccountAID from "../components/contacts/InputAccountAID"
+import InputCfname from "../components/contacts/InputCfname"
+import InputCLname from "../components/contacts/InputCLname"
+import InputCaddress from "../components/contacts/InputCaddress"
+import InputCemail from "../components/contacts/InputCemail"
+import InputCnumber from "../components/contacts/InputCnumber"
 
 
 axios.defaults.headers.put['Content-Type'] = 'application/json';

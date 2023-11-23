@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 import { AccountToEditContext } from '../contexts/AccountToEditContext';
 
-import InputAID from "../components/InputAID"
-import InputAname from "../components/InputAname"
-import InputAtype from "../components/InputAtype"
+import InputAID from "../components/account/InputAID"
+import InputAname from "../components/account/InputAname"
+import InputAtype from "../components/account/InputAtype"
 
 axios.defaults.headers.put['Content-Type'] = 'application/json';
 
