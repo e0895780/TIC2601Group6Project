@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>Contact</title>
+        <script type="text/javascript" src="scripts/contact.js"></script>
+    </head>
+    <body onload="renderContactsTable()">
+        <h1>
+            Contact
+            <!-- HTML5 -->            
+        </h1>
+        <p>
+            <h2>Create/Update Contact</h2>
+            <form id="contactForm" onsubmit="return createUpdateContact()">
+                <table border="1" width="100%">
+                    <tbody>
+                        <tr>
+                            <td width="20%"><b>Account ID</b></td>
+                            <!-- HTML5 -->
+                            <td width="80%"><input type="text" placeholder="Enter Account ID" required="true" id="AccountAID" name="AccountAID" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>First Name</b></td>
+                            <!-- HTML5 -->
+                            <td width="80%"><input type="text" placeholder="Enter First Name" required="true" id="Cfname" name="Cfname" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Last Name</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="text" placeholder="Enter Last Name" required="true" id="CLname" name="CLname" style="width: 300px"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Email</b></td>
+                            <td>
+                                <!-- HTML5 -->
+                                <input type="text" placeholder="Enter Email Address" required="true" id="Cemail" name="Cemail" style="width: 300px" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Address</b></td>
+                            <td>
+                                <!-- HTML5 -->
+                                <input type="text" placeholder="Enter Address" required="true" id="Caddress" name="Caddress" style="width: 300px" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Number</b></td>
+                            <td>
+                                <!-- HTML5 -->
+                                <input type="text" placeholder="Enter Number" required="true" id="Cnumber" name="Cnumber" style="width: 300px" />
+                            </td>
+                        </tr>
+ 
+                        <tr>
+                            <td colspan="2" style="text-align: center;"><input type="reset" value="Clear" /> <input type="submit" value="Create/Update" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </p>
+        <hr />
+        <p>
+            <h2>View All Contacts</h2>
+            <table id="contactsTable" border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </p>
+        <hr />
+        <p>
+            <a href="./index.html">Home</a>
+        </p>
+    </body>
+</html>

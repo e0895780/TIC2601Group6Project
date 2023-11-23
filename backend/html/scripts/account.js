@@ -27,7 +27,7 @@ function renderAccountsTable()
 
     });
 
-    req.open('GET', 'http://localhost:3000/account');
+    req.open('GET', 'http://localhost:3001/account');
     req.send();    
 }
 
@@ -75,7 +75,7 @@ function deleteAccount(AID)
 
         const req = new XMLHttpRequest();
         req.addEventListener('load', renderAccountsTable);
-        req.open("DELETE", 'http://localhost:3000/account?AID=' + accounts[i].AID);
+        req.open("DELETE", 'http://localhost:3001/account?AID=' + accounts[i].AID);
         req.send();
     }
 }
@@ -97,11 +97,11 @@ function createUpdateAccount()
 
     if(editMode == 'create')
     {                    
-        req.open("PUT", 'http://localhost:3000/account');        
+        req.open("PUT", 'http://localhost:3001/account');        
     }
     else if(editMode == 'update')
     {
-        req.open("POST", 'http://localhost:3000/account');        
+        req.open("POST", 'http://localhost:3001/account');        
     }
     
     req.setRequestHeader('Content-Type', 'application/json');

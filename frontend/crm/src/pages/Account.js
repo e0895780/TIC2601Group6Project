@@ -10,7 +10,6 @@ import InputAtype from "../components/InputAtype"
 
 axios.defaults.headers.put['Content-Type'] = 'application/json';
 
-// editMode, setEditMode, accounts, setAccounts,AIDToEdit, setAIDToEdit, AnameToEdit, setAnameToEdit, AtypeToEdit, setAtypeToEdit
 
 
 function InputFormAccount() {
@@ -135,8 +134,9 @@ function TableRowsAccounts() {
                         <td>{account.AID}</td><td>{account.Aname}</td><td>{account.Atype}</td>
                         <td>
                             <Link onClick={event => updateAccount(event, account.AID)}>Update</Link> |
-                            <Link onClick={event => deleteAccount(event, account.AID)}>Delete</Link>
-                            {/* <Link onClick={event => updateContact(event, account.AID)}>Update Contact</Link> */}
+                            <Link onClick={event => deleteAccount(event, account.AID)}>Delete</Link> |
+                            <Link to="/Contact">Update Contact</Link>
+                            {/* <Link to={`/contact/${account.AID}`}>Update Contact</Link> */}
                         </td>
                     </tr>
             )}
@@ -192,7 +192,7 @@ export default function Account() {
 
                 <div className="row" style={{ width: '100%' }}>
                     <div style={{ width: '100%', float: 'left' }}>
-                        <h2 style={{ marginTop: '0px' }}>Book</h2>
+                        <h2 style={{ marginTop: '0px' }}>Account</h2>
                     </div>
                 </div>
                 <div className="row" style={{ width: '100%' }}>

@@ -24,14 +24,14 @@ router.route('/')
     .put((req,res) => {
         console.log('PUT: /contact');
 
-        var id = req.body.id;
+        var AccountAID = req.body.AccountAID;
         var Cfname = req.body.Cfname;
         var CLname = req.body.CLname;
         var Caddress = req.body.Caddress;
         var Cemail = req.body.Cemail;
         var Cnumber = req.body.Cnumber;
 
-        crmdatabase.Contacts.create({id: id, Cfname: Cfname,CLname:CLname,Caddress:Caddress,Cemail:Cemail,Cnumber:Cnumber}).then(() => {
+        crmdatabase.Contacts.create({AccountAID:AccountAID,Cfname: Cfname,CLname:CLname,Caddress:Caddress,Cemail:Cemail,Cnumber:Cnumber}).then(() => {
             res.sendStatus(200);
         }).catch(()=>{
             res.sendStatus(400);
@@ -40,27 +40,28 @@ router.route('/')
 
     // update the contact
     .post((req, res) =>{
-        console.log('POST: /account');
+        console.log('POST: /contact');
 
-        var id = req.body.id;
+        var AccountAID = req.body.AccountAID;
         var Cfname = req.body.Cfname;
         var CLname = req.body.CLname;
         var Caddress = req.body.Caddress;
         var Cemail = req.body.Cemail;
         var Cnumber = req.body.Cnumber;
 
-        crmdatabase.Contacts.findByPk(AID).then((contact) =>{
+        
+        crmdatabase.Contacts.findOne({where:{AccountAID}}).then((contact) =>{
             if (contact === null){
                 res.sendStatus(404);
             }
             else{
-                contact.id = id;
+               
                 contact.Cfname = Cfname;
                 contact.CLname = CLname;
                 contact.Caddress = Caddress;
                 contact.Cemail = Cemail;
                 contact.Cnumber = Cnumber;
-                account.save().then(() =>{
+                contact.save().then(() =>{
                     res.sendStatus(200);
                 })
             }
@@ -70,11 +71,11 @@ router.route('/')
 
     // delete the contact
     .delete((req, res) => {
-        console.log('DELETE: /contact?AID=' + req.query.AID);
+        console.log('DELETE: /contact?AccountId=' + req.query.AccountAID);
 
-        var AID = req.query.AID;
+        var AccountId = req.query.AccountId;
 
-        models.Contact.findByPk(AID).then((contact) => {
+        crmdatabase.Contacts.findOne({where:{AccountAID}}).then((contact) => {
             if (contact === null) {
                 res.sendStatus(404);
             }

@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors')
 const app = express();
-// const port = 3000;
-// if running react concurrently
 const port = 3001;
 
 const stageprobabilitydataInit = require('./stageprobabilitydataInit');
@@ -17,8 +15,8 @@ app.use('/opportunity', opportunity)
 const account = require('./account');
 app.use('/account', account)
 
-// const contact = require('./contact');
-// app.use('/contact', contact)
+const contact = require('./contact');
+app.use('/contact', contact)
 
 app.listen(port, function () {
     console.log(`Express app listening on port ${port}!`);

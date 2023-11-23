@@ -65,7 +65,7 @@ router.route('/')
 
         var AID = req.query.AID;
 
-        models.Account.findByPk(AID).then((account) => {
+        crmdatabase.Account.findByPk(AID).then((account) => {
             if (account === null) {
                 res.sendStatus(404);
             }

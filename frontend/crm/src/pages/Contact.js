@@ -1,43 +1,70 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from "react-router-dom";
 
-import InputCaddress from "../components/InputCaddress"
-import InputCemail from "../components/InputCemail"
+import { ContactToEditContext } from '../contexts/ContactToEditContext';
+
+import InputAccountAID from "../components/InputAccountAID"
 import InputCfname from "../components/InputCfname"
 import InputCLname from "../components/InputCLname"
+import InputCaddress from "../components/InputCaddress"
+import InputCemail from "../components/InputCemail"
 import InputCnumber from "../components/InputCnumber"
 
 
-function InputFormContact({ editMode, setEditMode, contacts, setContacts,
-    AIDToUpdate, setAIDToUpdate, CfnameToEdit, setCfnameToEdit,CLnameToEdit, setCLnameToEdit, CaddressToEdit, setCaddressToEdit,CemailToEdit, setCemailToEdit,CnumberToEdit,setCnumberToEdit }) {
+axios.defaults.headers.put['Content-Type'] = 'application/json';
+
+
+
+function InputFormContact() {
+
+    const{
+        editMode, setEditMode, 
+        contacts, setContacts,
+        AccountAIDToEdit, setAccountAIDToEdit,
+        CfnameToEdit, setCfnameToEdit, 
+        CLnameToEdit, setCLnameToEdit, 
+        CemailToEdit, setCemailToEdit,
+        CnumberToEdit, setCnumberToEdit,
+        CaddressToEdit, setCaddressToEdit,
+        reloadContacts, setReloadContacts
+
+    } = useContext(ContactToEditContext);
+
+    function resetInputState() {
+        setAccountAIDToEdit('')
+        setCfnameToEdit('')
+        setCLnameToEdit('')
+        setCemailToEdit('')
+        setCnumberToEdit('')
+        setCaddressToEdit('')
+    }
 
     function processForm() {
-
-        console.log('InputFormContact: processForm')
+        // check on this
+        // var accountId = contacts.AccountId
 
         if (editMode === 'create') {
 
-            var newContact = { 'AID': AIDToUpdate, 'Cfname': CfnameToEdit, 'CLname': CLnameToEdit,'Cemail': CemailToEdit,'Caddress': CaddressToEdit,'Cnumber': CnumberToEdit, }
-            setContacts(contacts.concat([newContact]));
+            var newContact = { 'AccountAID':AccountAIDToEdit,'Cfname': CfnameToEdit, 'CLname': CLnameToEdit, 'Cemail': CemailToEdit, 'Caddress':CaddressToEdit,'Cnumber':CnumberToEdit }
+            axios.put('http://localhost:3001/contact',newContact).then((response)=>{
+                resetInputState();
+                setReloadContacts(!reloadContacts)
+            })
+            
         }
         else if (editMode === 'edit') {
 
-            var contact = contacts.find(contact => contact.AID === AIDToUpdate)
-            contact.AID = AIDToUpdate;
-            contact.Cfname = CfnameToEdit;
-            contact.CLname = CLnameToEdit;
-            contact.Caddress = CaddressToEdit;
-            contact.Cemail = CemailToEdit;
-            contact.Cnumber = CnumberToEdit;
-            setEditMode('create');
+            var contactToEdit = {'AccountAID':AccountAIDToEdit,'Cfname': CfnameToEdit, 'CLname': CLnameToEdit, 'Cemail': CemailToEdit, 'Caddress':CaddressToEdit,'Cnumber':CnumberToEdit}
+            axios.put('http://localhost:3001/contact',newContact).then((response)=>{
+                resetInputState();
+                setReloadContacts(!reloadContacts)
+                setEditMode('create')
+            })
+
         }
 
-        setAIDToUpdate('');
-        setCfnameToEdit('');
-        setCLnameToEdit('');
-        setCaddressToEdit('');
-        setCemailToEdit('');
-        setCnumberToEdit('');
+
     }
 
     return (
@@ -46,43 +73,43 @@ function InputFormContact({ editMode, setEditMode, contacts, setContacts,
 
             <table border={'1'} style={{ width: '100%', position: "relative" }} >
                 <tbody>
-                    <tr>
-                        <td width={'20%'}><b>Account-ID</b></td>
-                        <td>{AIDToUpdate}</td>
-                    </tr>
 
                     <tr>
-                        <td><b>First Name</b></td>
+                        <td><b>Account ID</b></td>
                         <td>
-                            <InputCfname label='First Name' value={CfnameToEdit} setValue={setCfnameToEdit} />
+                            <InputAccountAID label='Account-ID' value={AccountAIDToEdit} setValue={setAccountAIDToEdit} />
                         </td>
                     </tr>
                     
                     <tr>
-                        <td><b>Last Name</b></td>
+                        <td><b>First-Name</b></td>
                         <td>
-                            <InputCLname label='Last Name' value={CLnameToEdit} setValue={setCLnameToEdit} />   
+                            <InputCfname label='First-Name' value={CfnameToEdit} setValue={setCfnameToEdit} />
                         </td>
                     </tr>
-
+                    <tr>
+                        <td><b>Last-Name</b></td>
+                        <td>
+                            <InputCLname label='Last-Name' value={CLnameToEdit} setValue={setCLnameToEdit} />   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Number</b></td>
+                        <td>
+                            <InputCnumber label='Number' value={CnumberToEdit} setValue={setCnumberToEdit} />   
+                        </td>
+                    </tr>
                     <tr>
                         <td><b>Email</b></td>
                         <td>
-                            <InputCemail label='Email Address' value={CemailToEdit} setValue={setCemailToEdit} />   
+                            <InputCemail label='Email' value={CemailToEdit} setValue={setCemailToEdit} />   
                         </td>
                     </tr>
 
                     <tr>
-                        <td><b>Address</b></td>
+                        <td width={'20%'}><b>Address</b></td>
                         <td>
-                            <InputCaddress label='Address' value={CaddressToEdit} setValue={setCaddressToEdit} />   
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td><b>Phone Number</b></td>
-                        <td>
-                            <InputCnumber label='Phone Number' value={CnumberToEdit} setValue={setCnumberToEdit} />   
+                            <InputCaddress label='Address' value={CaddressToEdit} setValue={setCaddressToEdit} />
                         </td>
                     </tr>
 
@@ -98,45 +125,65 @@ function InputFormContact({ editMode, setEditMode, contacts, setContacts,
     )
 }
 
-function TableRowsContacts({ editMode, setEditMode, contacts, setContacts,
-    AIDToUpdate, setAIDToUpdate, CfnameToEdit, setCfnameToEdit,CLnameToEdit, setCLnameToEdit, CaddressToEdit, setCaddressToEdit,CemailToEdit, setCemailToEdit,CnumberToEdit,setCnumberToEdit }) {
 
-    function updateContact(event, AID) {
+
+function TableRowsContacts() {
+    const{
+        editMode, setEditMode, 
+        contacts, setContacts,
+        AccountAIDToEdit, setAccountAIDToEdit,
+        CfnameToEdit, setCfnameToEdit, 
+        CLnameToEdit, setCLnameToEdit, 
+        CemailToEdit, setCemailToEdit,
+        CnumberToEdit, setCnumberToEdit,
+        CaddressToEdit, setCaddressToEdit,
+        reloadContacts, setReloadContacts
+
+    } = useContext(ContactToEditContext);
+
+    useEffect(
+        () => {
+            axios.get('http://localhost:3001/contact').then((response) => {
+                setContacts(response.data);
+            })
+        }, [reloadContacts]
+    )
+
+    function updateContact(event, AccountAID) {
         setEditMode('edit')
-        console.log('Editing Contact for Account ID' + AID)
 
-        var contact = contacts.find((contact) => contact.AID === AID)
-        setAIDToUpdate(contact.AID)
-        setCLnameToEdit(contact.CLname)
+        var contact = contacts.find(contact => contact.AccountAID === AccountAID)
         setCfnameToEdit(contact.Cfname)
-        setCaddressToEdit(contact.Caddress);
-        setCemailToEdit(contact.Cemail);
-        setCnumberToEdit(contact.Cnumber);
+        setCLnameToEdit(contact.CLname)
+        setCemailToEdit(contact.Cemail)
+        setCnumberToEdit(contact.Cnumber)
+        setCaddressToEdit(contact.Caddress)
     }
 
-    function deleteContact(event, AID) {
-        setContacts(contacts.filter((contact) => contact.AID !== AID));
+    function deleteContact(event, AccountAID) {
+        axios.delete('http://localhost:3001/contact', { params: { 'AccountAID': AccountAID } }).then((response) => {
+            setReloadContacts(!reloadContacts)
+        })
     }
 
     return (
         <>
             {contacts.map(
-                contact => 
-                    <tr key={contact.AID}>
-                        <td>{contact.AID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Caddress}</td><td>{contact.Cemail}</td><td>{contact.Cnumber}</td>
+                contact =>
+                    <tr key={contact.AccountAID}>
+                        <td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
                         <td>
-                            <Link onClick={(event) => updateContact(event, contact.AID)}>Update</Link> |
-                            <Link onClick={(event) => deleteContact(event, contact.AID)}>Delete</Link>
+                            <Link onClick={event => updateContact(event, contact.AccountAID)}>Update</Link> |
+                            <Link onClick={event => deleteContact(event, contact.Account)}>Delete</Link>
                         </td>
                     </tr>
             )}
         </>
-      );
+    )
 }
 
 
-function TableContacts({editMode, setEditMode, contacts, setContacts,
-    AIDToUpdate, setAIDToUpdate, CfnameToEdit, setCfnameToEdit,CLnameToEdit, setCLnameToEdit, CaddressToEdit, setCaddressToEdit,CemailToEdit, setCemailToEdit,CnumberToEdit,setCnumberToEdit}) {
+function TableContacts() {
 
     return (
         <>
@@ -148,20 +195,14 @@ function TableContacts({editMode, setEditMode, contacts, setContacts,
                         <th>Account ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Number</th>
                         <th>Email</th>
                         <th>Address</th>
-                        <th>Number</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRowsContacts editMode={editMode} setEditMode={setEditMode} contacts={contacts} setContacts={setContacts}
-                        AIDToUpdate={AIDToUpdate} setAIDToUpdate={setAIDToUpdate}
-                        CfnameToEdit={CfnameToEdit} setCfnameToEdit={setCfnameToEdit}
-                        CLnameToEdit={CLnameToEdit} setCLnameToEdit={setCLnameToEdit}
-                        CaddressToEdit={CaddressToEdit} setCaddressToEdit={setCaddressToEdit}
-                        CemailToEdit={CemailToEdit} setCemailToEdit={setCemailToEdit}
-                        CnumberToEdit={CnumberToEdit} setCnumberToEdit={setCnumberToEdit} />
+                    <TableRowsContacts />
                 </tbody>
             </table>
         </>
@@ -170,43 +211,44 @@ function TableContacts({editMode, setEditMode, contacts, setContacts,
 
 export default function Contact() {
 
-    const [editMode, setEditMode] = useState('create');
+    const [editMode, setEditMode] = useState('create')
     const [contacts, setContacts] = useState([]);
-    const [AIDToUpdate, setAIDToUpdate] = useState('');
-    const [CfnameToEdit, setCfnameToEdit] = useState('');
-    const [CLnameToEdit, setCLnameToEdit] = useState('');
-    const [CaddressToEdit, setCaddressToEdit] = useState('');
-    const [CemailToEdit, setCemailToEdit] = useState('');
-    const [CnumberToEdit, setCnumberToEdit] = useState('');
 
+    const [AccountAIDToEdit, setAccountAIDToEdit] = useState('')
+    const [CfnameToEdit, setCfnameToEdit] = useState('')
+    const [CLnameToEdit, setCLnameToEdit] = useState('')
+    const [CnumberToEdit, setCnumberToEdit] = useState('')
+    const [CemailToEdit, setCemailToEdit] = useState('')
+    const [CaddressToEdit, setCaddressToEdit] = useState('')
+
+    const [reloadContacts, setReloadContacts] = useState(true)
 
     return (
         <>
-            <div className="row" style={{ width: '100%' }}>
-                <div style={{ width: '100%', float: 'left' }}>
-                    <h2 style={{ marginTop: '0px' }}>Contact</h2>
+            <ContactToEditContext.Provider value={{
+                editMode, setEditMode,
+                contacts, setContacts,
+                AccountAIDToEdit, setAccountAIDToEdit,
+                CfnameToEdit, setCfnameToEdit,
+                CLnameToEdit, setCLnameToEdit,
+                CnumberToEdit, setCnumberToEdit,
+                CemailToEdit, setCemailToEdit,
+                CaddressToEdit, setCaddressToEdit,
+                reloadContacts, setReloadContacts
+            }}>
+
+                <div className="row" style={{ width: '100%' }}>
+                    <div style={{ width: '100%', float: 'left' }}>
+                        <h2 style={{ marginTop: '0px' }}>Contact</h2>
+                    </div>
                 </div>
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <InputFormContact editMode={editMode} setEditMode={setEditMode} contacts={contacts} setContacts={setContacts}
-                    AIDToUpdate={AIDToUpdate} setAIDToUpdate={setAIDToUpdate}
-                    CLnameToEdit={CLnameToEdit} setCLnameToEdit={setCLnameToEdit}
-                    CfnameToEdit={CfnameToEdit} setCfnameToEdit={setCfnameToEdit}
-                    CaddressToEdit={CaddressToEdit} setCaddressToEdit={setCaddressToEdit}
-                    CemailToEdit={CemailToEdit} setCemailToEdit={setCemailToEdit}
-                    CnumberToEdit={CnumberToEdit} setCnumberToEdit={setCnumberToEdit}
-                    />
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <TableContacts editMode={editMode} setEditMode={setEditMode} contacts={contacts} setContacts={setContacts}
-                    AIDToUpdate={AIDToUpdate} setAIDToUpdate={setAIDToUpdate}
-                    CLnameToEdit={CLnameToEdit} setCLnameToEdit={setCLnameToEdit}
-                    CfnameToEdit={CfnameToEdit} setCfnameToEdit={setCfnameToEdit}
-                    CaddressToEdit={CaddressToEdit} setCaddressToEdit={setCaddressToEdit}
-                    CemailToEdit={CemailToEdit} setCemailToEdit={setCemailToEdit}
-                    CnumberToEdit={CnumberToEdit} setCnumberToEdit={setCnumberToEdit}
-                    />
-            </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <InputFormContact />
+                </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <TableContacts />
+                </div>
+            </ContactToEditContext.Provider>
         </>
     )
 };

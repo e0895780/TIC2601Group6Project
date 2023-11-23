@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
     '', '', '',
     {
         dialect: 'sqlite',
-        storage: './db/crmdatabase.db',
+        storage: './backend/db/crmdatabase.db',
         logging: false
     }
 );
@@ -198,8 +198,7 @@ const quotation = sequelize.define('quotation', {
 
 // 1-N relationship for Account table and contact table
 Account.hasMany(Contacts);
-Contacts.belongsTo(Account)
-
+Contacts.belongsTo(Account);
 
 
 
@@ -217,6 +216,6 @@ quotation.belongsTo(Opportunity);
 
 sequelize.sync()
 
-console.log(Account);
+// console.log(Account);
 
 module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
