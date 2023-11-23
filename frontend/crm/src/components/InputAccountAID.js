@@ -12,7 +12,7 @@ export default function InputAccountAID({ label, value, setValue }) {
             onChange={(event) => {
                 setValue(event.target.value);
             }}
-            // readOnly
+            readOnly
         />
     )
 };

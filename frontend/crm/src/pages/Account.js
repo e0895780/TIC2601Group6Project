@@ -135,8 +135,7 @@ function TableRowsAccounts() {
                         <td>
                             <Link onClick={event => updateAccount(event, account.AID)}>Update</Link> |
                             <Link onClick={event => deleteAccount(event, account.AID)}>Delete</Link> |
-                            <Link to="/Contact">Update Contact</Link>
-                            {/* <Link to={`/contact/${account.AID}`}>Update Contact</Link> */}
+                            <Link to={`/Contact?accountAID=${account.AID}`}>Update Contact</Link>
                         </td>
                     </tr>
             )}
@@ -154,9 +153,9 @@ function TableAccounts() {
             <table id={'accountsTable'} border={'1'} width={'100%'}>
                 <thead>
                     <tr>
-                        <th>AID</th>
-                        <th>Aname</th>
-                        <th>Atype</th>
+                        <th>Account ID</th>
+                        <th>Account Name</th>
+                        <th>Account Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>

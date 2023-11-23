@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 import { ContactToEditContext } from '../contexts/ContactToEditContext';
 
@@ -31,6 +32,21 @@ function InputFormContact() {
 
     } = useContext(ContactToEditContext);
 
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const accountAIDFromURL = queryParams.get('accountAID');
+    
+    useEffect(() => {
+        if (accountAIDFromURL) {
+            
+            setAccountAIDToEdit(accountAIDFromURL);
+        }
+    }, [accountAIDFromURL]);
+
+
+
+
     function resetInputState() {
         setAccountAIDToEdit('')
         setCfnameToEdit('')
@@ -41,8 +57,7 @@ function InputFormContact() {
     }
 
     function processForm() {
-        // check on this
-        // var accountId = contacts.AccountId
+    
 
         if (editMode === 'create') {
 
@@ -127,7 +142,7 @@ function InputFormContact() {
 
 
 
-function TableRowsContacts() {
+function TableRowsContacts({accountAIDFromURL}) {
     const{
         editMode, setEditMode, 
         contacts, setContacts,
@@ -149,10 +164,15 @@ function TableRowsContacts() {
         }, [reloadContacts]
     )
 
+
+  
+
+
     function updateContact(event, AccountAID) {
         setEditMode('edit')
-
-        var contact = contacts.find(contact => contact.AccountAID === AccountAID)
+        // Only display contact relate to account id
+        var contact = contacts.find(contact => contact.AccountAID === AccountAID);
+        // var contact = contacts.find(contact => contact.AccountAID === AccountAID)
         setCfnameToEdit(contact.Cfname)
         setCLnameToEdit(contact.CLname)
         setCemailToEdit(contact.Cemail)
@@ -166,28 +186,56 @@ function TableRowsContacts() {
         })
     }
 
+      // Filter contacts based on the selected Account ID
+    const filteredContacts = contacts.filter(
+        (contact) => contact.AccountAID === parseInt(accountAIDFromURL, 10)
+    );
     return (
+
+
+        // display contact relate to account id
         <>
-            {contacts.map(
+            {filteredContacts.map(
                 contact =>
                     <tr key={contact.AccountAID}>
                         <td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
                         <td>
                             <Link onClick={event => updateContact(event, contact.AccountAID)}>Update</Link> |
-                            <Link onClick={event => deleteContact(event, contact.Account)}>Delete</Link>
+                            <Link onClick={event => deleteContact(event, contact.AccountAID)}>Delete</Link>
                         </td>
                     </tr>
             )}
         </>
+
+
+
+
+
+        // <>
+        //     {contacts.map(
+        //         contact =>
+        //             <tr key={contact.AccountAID}>
+        //                 <td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
+        //                 <td>
+        //                     <Link onClick={event => updateContact(event, contact.AccountAID)}>Update</Link> |
+        //                     <Link onClick={event => deleteContact(event, contact.Account)}>Delete</Link>
+        //                 </td>
+        //             </tr>
+        //     )}
+        // </>
     )
 }
 
 
 function TableContacts() {
 
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const accountAIDFromURL = queryParams.get('accountAID');
+
     return (
         <>
-            <h3>View All Contacts</h3>
+            <h3>View All Contacts Under Account ID</h3>
 
             <table id={'contactsTable'} border={'1'} width={'100%'}>
                 <thead>
@@ -202,7 +250,7 @@ function TableContacts() {
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRowsContacts />
+                    <TableRowsContacts accountAIDFromURL={accountAIDFromURL}/>
                 </tbody>
             </table>
         </>
@@ -222,6 +270,11 @@ export default function Contact() {
     const [CaddressToEdit, setCaddressToEdit] = useState('')
 
     const [reloadContacts, setReloadContacts] = useState(true)
+
+    // Add the following block to get the Account ID from the URL
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const accountAIDFromURL = queryParams.get('accountAID');
 
     return (
         <>
@@ -246,7 +299,9 @@ export default function Contact() {
                     <InputFormContact />
                 </div>
                 <div className="row" style={{ width: '100%' }}>
-                    <TableContacts />
+                
+                    <TableContacts accountAIDFromURL={accountAIDFromURL} />
+                    {/* <TableContacts /> */}
                 </div>
             </ContactToEditContext.Provider>
         </>
