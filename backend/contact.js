@@ -23,7 +23,7 @@ router.route('/')
     // generate new contact
     .put((req,res) => {
         console.log('PUT: /contact');
-
+        var id = req.body.id;
         var AccountAID = req.body.AccountAID;
         var Cfname = req.body.Cfname;
         var CLname = req.body.CLname;
@@ -31,7 +31,7 @@ router.route('/')
         var Cemail = req.body.Cemail;
         var Cnumber = req.body.Cnumber;
 
-        crmdatabase.Contacts.create({AccountAID:AccountAID,Cfname: Cfname,CLname:CLname,Caddress:Caddress,Cemail:Cemail,Cnumber:Cnumber}).then(() => {
+        crmdatabase.Contacts.create({id:id,AccountAID:AccountAID,Cfname: Cfname,CLname:CLname,Caddress:Caddress,Cemail:Cemail,Cnumber:Cnumber}).then(() => {
             res.sendStatus(200);
         }).catch(()=>{
             res.sendStatus(400);
@@ -41,7 +41,7 @@ router.route('/')
     // update the contact
     .post((req, res) =>{
         console.log('POST: /contact');
-
+        var id = req.body.id;
         var AccountAID = req.body.AccountAID;
         var Cfname = req.body.Cfname;
         var CLname = req.body.CLname;
@@ -50,12 +50,12 @@ router.route('/')
         var Cnumber = req.body.Cnumber;
 
         
-        crmdatabase.Contacts.findOne({where:{AccountAID}}).then((contact) =>{
+        crmdatabase.Contacts.findByPk(id).then((contact) =>{
             if (contact === null){
                 res.sendStatus(404);
             }
             else{
-               
+                
                 contact.Cfname = Cfname;
                 contact.CLname = CLname;
                 contact.Caddress = Caddress;
@@ -71,11 +71,11 @@ router.route('/')
 
     // delete the contact
     .delete((req, res) => {
-        console.log('DELETE: /contact?AccountId=' + req.query.AccountAID);
-
-        var AccountId = req.query.AccountId;
-
-        crmdatabase.Contacts.findOne({where:{AccountAID}}).then((contact) => {
+        console.log('DELETE: /contact?Contactid=' + req.query.id);
+    
+        var id = req.query.id;  // Corrected from req.query.AccountId
+    
+        crmdatabase.Contacts.findByPk(id).then((contact) => {
             if (contact === null) {
                 res.sendStatus(404);
             }

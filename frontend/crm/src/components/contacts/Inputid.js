@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function InputAccountAID({ label, value, setValue }) {    
+export default function Inputid({ label, value, setValue }) {    
 
     return (
         <input

@@ -36,7 +36,7 @@ function renderContactsTable()
 
 
 
-function updateAccount(AccountAID)
+function updateContact(AccountAID)
 {
     console.log('updateContact: ' + AccountAID);
 
@@ -62,7 +62,7 @@ function updateAccount(AccountAID)
 
 
 
-function deleteAccount(AccountAID)
+function deleteContact(AccountAID)
 {
     console.log('deleteContact: ' + AccountAID);
 
@@ -79,8 +79,8 @@ function deleteAccount(AccountAID)
         }
 
         const req = new XMLHttpRequest();
-        req.addEventListener('load', renderAccountsTable);
-        req.open("DELETE", 'http://localhost:3001/contact?AccountAID=' + accounts[i].AccountAID);
+        req.addEventListener('load', renderContactsTable);
+        req.open("DELETE", 'http://localhost:3001/contact?AccountAID=' + contacts[i].AccountAID);
         req.send();
     }
 }

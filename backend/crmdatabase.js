@@ -197,7 +197,7 @@ const quotation = sequelize.define('quotation', {
 
 
 // 1-N relationship for Account table and contact table
-Account.hasMany(Contacts);
+Account.hasMany(Contacts,{onDelete:'CASCADE'});
 Contacts.belongsTo(Account);
 
 
@@ -214,7 +214,7 @@ quotation.belongsTo(Opportunity);
 // quotation.hasMany(Product);
 // Product.belongsTo(quotation);
 
-sequelize.sync()
+sequelize.sync({force:true});
 
 // console.log(Account);
 
