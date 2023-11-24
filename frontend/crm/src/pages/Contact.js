@@ -163,27 +163,22 @@ function TableRowsContacts() {
         CemailToEdit, setCemailToEdit,
         CnumberToEdit, setCnumberToEdit,
         CaddressToEdit, setCaddressToEdit,
-        reloadContacts, setReloadContacts
-
+        reloadContacts, setReloadContacts,
+        searchAccountID, setSearchAccountID
+        
     } = useContext(ContactToEditContext);
 
     useEffect(
         () => {
             axios.get('http://localhost:3001/contact').then((response) => {
                 setContacts(response.data);
-            })
-        }, [reloadContacts]
+            });
+        },[reloadContacts]
     )
-
-
-  
-
 
     function updateContact(event, id) {
         setEditMode('edit')
-        // Only display contact relate to account id
         var contact = contacts.find(contact => contact.id === id);
-        // var contact = contacts.find(contact => contact.AccountAID === AccountAID)
         setidToEdit(contact.id);
         setAccountAIDToEdit(contact.AccountAID);
         setCfnameToEdit(contact.Cfname)
@@ -199,52 +194,68 @@ function TableRowsContacts() {
         })
     }
 
-      // Filter contacts based on the selected Account ID
-    // const filteredContacts = contacts.filter(
-    //     (contact) => contact.AccountAID === parseInt(accountAIDFromURL, 10)
-    // );
+    // original code
+    // return (
+
+    //     <>
+    //         {contacts.map(
+    //             contact =>
+    //                 <tr key={contact.id}>
+    //                     <td>{contact.id}</td><td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
+    //                     <td>
+    //                         <Link onClick={event => updateContact(event, contact.id)}>Update</Link> |
+    //                         <Link onClick={event => deleteContact(event, contact.id)}>Delete</Link>
+    //                     </td>
+    //                 </tr>
+    //         )}
+    //     </>
+    // )
+
+    // new code for filter function
+    // return (
+    //     <>
+    //         {contacts
+    //             .filter(contact =>
+    //                 searchAccountID === '' || String(contact.AccountAID) === searchAccountID
+    //             )
+    //             .map(
+    //                 contact =>
+    //                     <tr key={contact.id}>
+    //                         <td>{contact.id}</td><td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
+    //                         <td>
+    //                             <Link onClick={event => updateContact(event, contact.id)}>Update</Link> |
+    //                             <Link onClick={event => deleteContact(event, contact.id)}>Delete</Link>
+    //                         </td>
+    //                     </tr>
+    //             )}
+    //     </>
+    // )
+
+    // new filter code for manual search
     return (
-
-
-        // display contact relate to account id
-        // <>
-        //     {filteredContacts.map(
-        //         contact =>
-        //             <tr key={contact.AccountAID}>
-        //                 <td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
-        //                 <td>
-        //                     <Link onClick={event => updateContact(event, contact.AccountAID)}>Update</Link> |
-        //                     <Link onClick={event => deleteContact(event, contact.AccountAID)}>Delete</Link>
-        //                 </td>
-        //             </tr>
-        //     )}
-        // </>
-
-
-
-
-
         <>
-            {contacts.map(
-                contact =>
-                    <tr key={contact.id}>
-                        <td>{contact.id}</td><td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
-                        <td>
-                            <Link onClick={event => updateContact(event, contact.id)}>Update</Link> |
-                            <Link onClick={event => deleteContact(event, contact.id)}>Delete</Link>
-                        </td>
-                    </tr>
-            )}
+            {contacts
+                .filter(contact =>
+                    searchAccountID === '' || String(contact.AccountAID) === searchAccountID
+                )
+                .map(
+                    contact =>
+                        <tr key={contact.id}>
+                            <td>{contact.id}</td><td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
+                            <td>
+                                <Link onClick={event => updateContact(event, contact.id)}>Update</Link> |
+                                <Link onClick={event => deleteContact(event, contact.id)}>Delete</Link>
+                            </td>
+                        </tr>
+                )}
         </>
     )
+
 }
 
 
 function TableContacts() {
 
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
-    // const accountAIDFromURL = queryParams.get('accountAID');
 
     return (
         <>
@@ -265,7 +276,6 @@ function TableContacts() {
                 </thead>
                 <tbody>
                     <TableRowsContacts />
-                    {/* <TableRowsContacts accountAIDFromURL={accountAIDFromURL}/> */}
                 </tbody>
             </table>
         </>
@@ -286,10 +296,9 @@ export default function Contact() {
 
     const [reloadContacts, setReloadContacts] = useState(true)
 
-    // Add the following block to get the Account ID from the URL
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
-    // const accountAIDFromURL = queryParams.get('accountAID');
+    // new edit 2
+    const [searchAccountID, setSearchAccountID] = useState('');
+
 
     return (
         <>
@@ -303,7 +312,9 @@ export default function Contact() {
                 CnumberToEdit, setCnumberToEdit,
                 CemailToEdit, setCemailToEdit,
                 CaddressToEdit, setCaddressToEdit,
-                reloadContacts, setReloadContacts
+                reloadContacts, setReloadContacts,
+                // new edit 2
+                searchAccountID,setSearchAccountID,
             }}>
 
                 <div className="row" style={{ width: '100%' }}>
@@ -314,9 +325,24 @@ export default function Contact() {
                 <div className="row" style={{ width: '100%' }}>
                     <InputFormContact />
                 </div>
+                {/* new edit 2 336-345*/}
+                <div className="row" style={{ width: '100%' }}>
+                    <h3>Search Contacts by Account ID</h3>
+                    <label>Enter Account ID:</label>
+                    <input
+                        type="text"
+                        value={searchAccountID}
+                        onChange={(e) => setSearchAccountID(e.target.value)}
+                    />
+                    {/* this for auto search */}
+                    <button onClick={() => setReloadContacts(!reloadContacts)}>Search</button>
+                    {/* for manual search  */}
+                    {/* <button onClick={() => setReloadManualSearch(false)}>Search</button> */}
+                </div>
+
                 <div className="row" style={{ width: '100%' }}>
                 
-                    {/* <TableContacts accountAIDFromURL={accountAIDFromURL} /> */}
+                   
                     <TableContacts />
                 </div>
             </ContactToEditContext.Provider>
@@ -324,4 +350,3 @@ export default function Contact() {
     )
 };
 
-// common line 4, 38-47

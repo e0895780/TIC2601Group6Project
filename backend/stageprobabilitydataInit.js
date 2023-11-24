@@ -29,3 +29,6 @@ crmdatabase.sequelize.sync().then(() => {
         console.log('Stage Probability Data Loaded')
     })
 })
+
+
+

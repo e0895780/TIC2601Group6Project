@@ -211,8 +211,8 @@ Opportunity.hasMany(quotation);
 quotation.belongsTo(Opportunity);
 
 //1-N relationship for quotation table and Product table
-quotation.hasMany(Product);
-Product.belongsTo(quotation);
+// quotation.hasMany(Product);
+// Product.belongsTo(quotation);
 
 sequelize.sync({force:true});
 
