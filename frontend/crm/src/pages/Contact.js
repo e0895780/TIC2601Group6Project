@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { ContactToEditContext } from '../contexts/ContactToEditContext';
 
@@ -35,16 +35,16 @@ function InputFormContact() {
     } = useContext(ContactToEditContext);
 
 
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
-    // const accountAIDFromURL = queryParams.get('accountAID');
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const accountAIDFromURL = queryParams.get('accountAID');
     
-    // useEffect(() => {
-    //     if (accountAIDFromURL) {
+    useEffect(() => {
+        if (accountAIDFromURL) {
             
-    //         setAccountAIDToEdit(accountAIDFromURL);
-    //     }
-    // }, [accountAIDFromURL]);
+            setAccountAIDToEdit(accountAIDFromURL);
+        }
+    }, [accountAIDFromURL]);
 
 
 
@@ -323,3 +323,5 @@ export default function Contact() {
         </>
     )
 };
+
+// common line 4, 38-47

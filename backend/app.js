@@ -3,7 +3,7 @@ const cors = require('cors')
 const app = express();
 const port = 3001;
 
-const stageprobabilitydataInit = require('./stageprobabilitydataInit');
+// const stageprobabilitydataInit = require('./stageprobabilitydataInit');
 
 app.use(cors())
 app.use(express.json())
