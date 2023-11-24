@@ -211,25 +211,6 @@ function TableRowsContacts() {
     //     </>
     // )
 
-    // new code for filter function
-    // return (
-    //     <>
-    //         {contacts
-    //             .filter(contact =>
-    //                 searchAccountID === '' || String(contact.AccountAID) === searchAccountID
-    //             )
-    //             .map(
-    //                 contact =>
-    //                     <tr key={contact.id}>
-    //                         <td>{contact.id}</td><td>{contact.AccountAID}</td><td>{contact.Cfname}</td><td>{contact.CLname}</td><td>{contact.Cnumber}</td><td>{contact.Cemail}</td><td>{contact.Caddress}</td>
-    //                         <td>
-    //                             <Link onClick={event => updateContact(event, contact.id)}>Update</Link> |
-    //                             <Link onClick={event => deleteContact(event, contact.id)}>Delete</Link>
-    //                         </td>
-    //                     </tr>
-    //             )}
-    //     </>
-    // )
 
     // new filter code for manual search
     return (
@@ -293,11 +274,11 @@ export default function Contact() {
     const [CnumberToEdit, setCnumberToEdit] = useState('')
     const [CemailToEdit, setCemailToEdit] = useState('')
     const [CaddressToEdit, setCaddressToEdit] = useState('')
-
+    const [searchAccountID, setSearchAccountID] = useState('');
     const [reloadContacts, setReloadContacts] = useState(true)
 
     // new edit 2
-    const [searchAccountID, setSearchAccountID] = useState('');
+    
 
 
     return (
@@ -322,9 +303,11 @@ export default function Contact() {
                         <h2 style={{ marginTop: '0px' }}>Contact</h2>
                     </div>
                 </div>
+
                 <div className="row" style={{ width: '100%' }}>
                     <InputFormContact />
                 </div>
+
                 {/* new edit 2 336-345*/}
                 <div className="row" style={{ width: '100%' }}>
                     <h3>Search Contacts by Account ID</h3>
@@ -334,15 +317,11 @@ export default function Contact() {
                         value={searchAccountID}
                         onChange={(e) => setSearchAccountID(e.target.value)}
                     />
-                    {/* this for auto search */}
+                 
                     <button onClick={() => setReloadContacts(!reloadContacts)}>Search</button>
-                    {/* for manual search  */}
-                    {/* <button onClick={() => setReloadManualSearch(false)}>Search</button> */}
                 </div>
 
                 <div className="row" style={{ width: '100%' }}>
-                
-                   
                     <TableContacts />
                 </div>
             </ContactToEditContext.Provider>

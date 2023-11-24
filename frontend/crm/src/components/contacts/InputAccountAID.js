@@ -5,7 +5,7 @@ export default function InputAccountAID({ label, value, setValue }) {
     return (
         <input
             type={"text"}
-            placeholder={`Enter ${label} Id`}
+            placeholder={`Enter ${label}`}
             required={true}
             style={{ width: '300px' }}
             value={value}

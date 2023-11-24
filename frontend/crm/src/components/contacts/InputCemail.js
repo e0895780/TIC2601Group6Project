@@ -2,7 +2,7 @@ export default function InputCemail({ label, value, setValue }) {
     return (
         <input
             type={"text"}
-            placeholder={`Enter ${label} Name`}
+            placeholder={`Enter ${label}`}
             required={true}
             style={{ width: '300px' }}
             value={value}
