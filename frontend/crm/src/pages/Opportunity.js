@@ -1,39 +1,48 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Link } from "react-router-dom";
-
-import InputId from "../components/InputId"
-import InputName from "../components/InputName"
-import InputDate from "../components/InputDate"
-import InputAmount from "../components/InputAmount"
-import InputStage from "../components/InputStage"
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 
-function InputFormOpportunity({ editMode, setEditMode, opportunities, setOpportunities,
-    OidToEdit, setOidToEdit, OnameToEdit, setOnameToEdit, OpartnerToEdit, setOpartnerToEdit, OdistributorToEdit, setOdistributorToEdit, OstageToEdit, setOstageToEdit, OclosedateToEdit, setOclosedateToEdit, OamountToEdit, setOamountToEdit }) {
+import { OpportunityToEditContext } from '../contexts/OpportunityToEditContext';
 
-    function processForm() {
+import InputAccountAID from "../components/opportunity/InputAccountAID"
+import InputId from "../components/opportunity/InputId"
+import InputName from "../components/opportunity/InputName"
+import InputDate from "../components/opportunity/InputDate"
+import InputAmount from "../components/opportunity/InputAmount"
+import InputStage from "../components/opportunity/InputStage"
 
-        console.log('InputFormOpportunity: processForm')
+axios.defaults.headers.put['Content-Type'] = 'application/json';
 
-        if (editMode === 'create') {
+function InputFormOpportunity() {
 
-            var newOpportunity = { 'Oid': OidToEdit, 'Oname': OnameToEdit, 'Opartner': OpartnerToEdit, 'Odistributor': OdistributorToEdit, 'Ostage': OstageToEdit, 'Oclosedate': OclosedateToEdit, 'Oamount': OamountToEdit}
-            setOpportunities(opportunities.concat([newOpportunity]));
+    const {
+        editMode, setEditMode,
+        opportunities, setOpportunities,
+        AccountAIDToEdit, setAccountAIDToEdit,
+        OidToEdit, setOidToEdit,
+        OnameToEdit, setOnameToEdit,
+        OpartnerToEdit, setOpartnerToEdit,
+        OdistributorToEdit, setOdistributorToEdit,
+        OstageToEdit, setOstageToEdit,
+        OclosedateToEdit, setOclosedateToEdit,
+        OamountToEdit, setOamountToEdit,
+        reloadOpportunities, setReloadOpportunities
+    } = useContext(OpportunityToEditContext);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const accountAIDFromURL = queryParams.get('accountAID');
+
+    useEffect(() => {
+        if (accountAIDFromURL) {
+            setAccountAIDToEdit(accountAIDFromURL);
         }
-        else if (editMode === 'edit') {
+    }, [accountAIDFromURL]);
 
-            var opportunity = opportunities.find(opportunity => opportunity.Oid === OidToEdit)
-            opportunity.Oid = OidToEdit
-            opportunity.Oname = OnameToEdit
-            opportunity.Opartner = OpartnerToEdit
-            opportunity.Odistributor = OdistributorToEdit
-            opportunity.Ostage = OstageToEdit
-            opportunity.Oclosedate = OclosedateToEdit
-            opportunity.Oamount = OamountToEdit
-
-            setEditMode('create')
-        }
-
+    function resetInputState() {
+        setAccountAIDToEdit('')
         setOidToEdit('')
         setOnameToEdit('')
         setOpartnerToEdit('')
@@ -43,12 +52,57 @@ function InputFormOpportunity({ editMode, setEditMode, opportunities, setOpportu
         setOamountToEdit('')
     }
 
+    function processForm() {
+
+        if (editMode === 'create') {
+
+            var newOpportunity = {
+                'AccountAID':AccountAIDToEdit,
+                'Oid': OidToEdit, 
+                'Oname': OnameToEdit, 
+                'Opartner': OpartnerToEdit, 
+                'Odistributor': OdistributorToEdit, 
+                'Ostage': OstageToEdit,
+                'Oclosedate': OclosedateToEdit,
+                'Oamount': OamountToEdit
+             }
+            axios.put('http://localhost:3001/opportunity', newOpportunity).then((response) => {
+                resetInputState();
+                setReloadOpportunities(!reloadOpportunities)
+            })
+        }
+        else if (editMode === 'edit') {
+
+            var opportunityToEdit = {
+                'AccountAID':AccountAIDToEdit,
+                'Oid': OidToEdit, 
+                'Oname': OnameToEdit, 
+                'Opartner': OpartnerToEdit, 
+                'Odistributor': OdistributorToEdit, 
+                'Ostage': OstageToEdit,
+                'Oclosedate': OclosedateToEdit,
+                'Oamount': OamountToEdit}
+            axios.post('http://localhost:3001/opportunity', opportunityToEdit).then((response) => {
+                resetInputState();
+                setReloadOpportunities(!reloadOpportunities)
+                setEditMode('create')
+            })
+        }
+    }
+
     return (
         <>
             <h3>Create/Update Opportunity</h3>
 
             <table border={'1'} style={{ width: '100%', position: "relative" }} >
                 <tbody>
+                <tr>
+                        <td><b>Account ID</b></td>
+                        <td>
+                            <InputAccountAID label='Account-ID' value={AccountAIDToEdit} setValue={setAccountAIDToEdit} />
+                        </td>
+                    </tr>
+
                     <tr>
                         <td width={'20%'}><b>Oid</b></td>
                         <td>
@@ -64,13 +118,13 @@ function InputFormOpportunity({ editMode, setEditMode, opportunities, setOpportu
                     <tr>
                         <td><b>Opartner</b></td>
                         <td>
-                            <InputName label='Partner' value={OpartnerToEdit} setValue={setOpartnerToEdit} />
+                            <InputName label='Opportunity' value={OpartnerToEdit} setValue={setOpartnerToEdit} />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Odistributor</b></td>
                         <td>
-                            <InputName label='Distributor' value={OdistributorToEdit} setValue={setOdistributorToEdit} />
+                            <InputName label='Opportunity' value={OdistributorToEdit} setValue={setOdistributorToEdit} />
                         </td>
                     </tr>
                     <tr>
@@ -103,27 +157,48 @@ function InputFormOpportunity({ editMode, setEditMode, opportunities, setOpportu
     )
 }
 
-function TableRowsOpportunities({ editMode, setEditMode, opportunities, setOpportunities,
-    OidToEdit, setOidToEdit, OnameToEdit, setOnameToEdit, OpartnerToEdit, setOpartnerToEdit, OdistributorToEdit, setOdistributorToEdit, OstageToEdit, setOstageToEdit, OclosedateToEdit, setOclosedateToEdit, OamountToEdit, setOamountToEdit  }) {
+function TableRowsOpportunities() {
+
+    const {
+        editMode, setEditMode,
+        opportunities, setOpportunities,
+        AccountAIDToEdit, setAccountAIDToEdit,
+        OidToEdit, setOidToEdit,
+        OnameToEdit, setOnameToEdit,
+        OpartnerToEdit, setOpartnerToEdit,
+        OdistributorToEdit, setOdistributorToEdit,
+        OstageToEdit, setOstageToEdit,
+        OclosedateToEdit, setOclosedateToEdit,
+        OamountToEdit, setOamountToEdit,
+        reloadOpportunities, setReloadOpportunities
+    } = useContext(OpportunityToEditContext);
+
+    useEffect(
+        () => {
+            axios.get('http://localhost:3001/opportunity').then((response) => {
+                setOpportunities(response.data);
+            })
+        }, [reloadOpportunities]
+    )
 
     function updateOpportunity(event, Oid) {
         setEditMode('edit')
-        console.log('Editing ' + Oid)
 
         var opportunity = opportunities.find(opportunity => opportunity.Oid === Oid)
+        setAccountAIDToEdit(opportunity.AccountAID);
         setOidToEdit(opportunity.Oid)
         setOnameToEdit(opportunity.Oname)
         setOpartnerToEdit(opportunity.Opartner)
         setOdistributorToEdit(opportunity.Odistributor)
         setOstageToEdit(opportunity.Ostage)
-        setOclosedateToEdit(opportunity.Oclosedate)
+        setOclosedateToEdit(opportunity.Oclosedate.slice(0, 10))
         setOamountToEdit(opportunity.Oamount)
     }
 
     function deleteOpportunity(event, Oid) {
-        setOpportunities(opportunities.filter(opportunity =>
-            opportunity.Oid !== Oid
-        ))
+        axios.delete('http://localhost:3001/opportunity', { params: { 'Oid': Oid } }).then((response) => {
+            setReloadOpportunities(!reloadOpportunities)
+        })
     }
 
     return (
@@ -131,7 +206,14 @@ function TableRowsOpportunities({ editMode, setEditMode, opportunities, setOppor
             {opportunities.map(
                 opportunity =>
                     <tr key={opportunity.Oid}>
-                        <td>{opportunity.Oid}</td><td>{opportunity.Oname}</td><td>{opportunity.Opartner}</td><td>{opportunity.Odistributor}</td><td>{opportunity.Ostage}</td><td>{opportunity.Oclosedate}</td><td>{opportunity.Oamount}</td>
+                        <td>{opportunity.AccountAID}</td>
+                        <td>{opportunity.Oid}</td>
+                        <td>{opportunity.Oname}</td>
+                        <td>{opportunity.Opartner}</td>
+                        <td>{opportunity.Odistributor}</td>
+                        <td>{opportunity.Ostage}</td>
+                        <td>{opportunity.Oclosedate.slice(0, 10)}</td>
+                        <td>{opportunity.Oamount}</td>
                         <td>
                             <Link onClick={event => updateOpportunity(event, opportunity.Oid)}>Update</Link> |
                             <Link onClick={event => deleteOpportunity(event, opportunity.Oid)}>Delete</Link>
@@ -143,8 +225,7 @@ function TableRowsOpportunities({ editMode, setEditMode, opportunities, setOppor
 }
 
 
-function TableOpportunities({ editMode, setEditMode, opportunities, setOpportunities,
-    OidToEdit, setOidToEdit, OnameToEdit, setOnameToEdit, OpartnerToEdit, setOpartnerToEdit, OdistributorToEdit, setOdistributorToEdit, OstageToEdit, setOstageToEdit, OclosedateToEdit, setOclosedateToEdit, OamountToEdit, setOamountToEdit }) {
+function TableOpportunities() {
 
     return (
         <>
@@ -153,6 +234,7 @@ function TableOpportunities({ editMode, setEditMode, opportunities, setOpportuni
             <table id={'opportunitiesTable'} border={'1'} width={'100%'}>
                 <thead>
                     <tr>
+                        <th>AccountAID</th>
                         <th>Oid</th>
                         <th>Oname</th>
                         <th>Opartner</th>
@@ -164,14 +246,7 @@ function TableOpportunities({ editMode, setEditMode, opportunities, setOpportuni
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRowsOpportunities editMode={editMode} setEditMode={setEditMode} opportunities={opportunities} setOpportunities={setOpportunities}
-                        OidToEdit={OidToEdit} setOidToEdit={setOidToEdit}
-                        OnameToEdit={OnameToEdit} setOnameToEdit={setOnameToEdit}
-                        OpartnerToEdit={OpartnerToEdit} setOpartnerToEdit={setOpartnerToEdit}
-                        OdistributorToEdit={OdistributorToEdit} setOdistributorToEdit={setOdistributorToEdit}
-                        OstageToEdit={OstageToEdit} setOstageToEdit={setOstageToEdit}
-                        OclosedateToEdit={OclosedateToEdit} setOclosedateToEdit={setOclosedateToEdit}
-                        OamountToEdit={OamountToEdit} setOamountToEdit={setOamountToEdit} />
+                    <TableRowsOpportunities />
                 </tbody>
             </table>
         </>
@@ -182,7 +257,7 @@ export default function Opportunity() {
 
     const [editMode, setEditMode] = useState('create')
     const [opportunities, setOpportunities] = useState([]);
-
+    const [AccountAIDToEdit, setAccountAIDToEdit] = useState('')
     const [OidToEdit, setOidToEdit] = useState('')
     const [OnameToEdit, setOnameToEdit] = useState('')
     const [OpartnerToEdit, setOpartnerToEdit] = useState('')
@@ -191,33 +266,37 @@ export default function Opportunity() {
     const [OclosedateToEdit, setOclosedateToEdit] = useState('')
     const [OamountToEdit, setOamountToEdit] = useState('')
 
+    const [reloadOpportunities, setReloadOpportunities] = useState(true)
+
     return (
         <>
-            <div className="row" style={{ width: '100%' }}>
-                <div style={{ width: '100%', float: 'left' }}>
-                    <h2 style={{ marginTop: '0px' }}>Opportunity</h2>
+            <OpportunityToEditContext.Provider value={{
+                editMode, setEditMode,
+                opportunities, setOpportunities,
+                AccountAIDToEdit, setAccountAIDToEdit,
+                OidToEdit, setOidToEdit,
+                OnameToEdit, setOnameToEdit,
+                OpartnerToEdit, setOpartnerToEdit,
+                OdistributorToEdit, setOdistributorToEdit,
+                OstageToEdit, setOstageToEdit,
+                OclosedateToEdit, setOclosedateToEdit,
+                OamountToEdit, setOamountToEdit,
+                reloadOpportunities, setReloadOpportunities
+                
+            }}>
+
+                <div className="row" style={{ width: '100%' }}>
+                    <div style={{ width: '100%', float: 'left' }}>
+                        <h2 style={{ marginTop: '0px' }}>Opportunity</h2>
+                    </div>
                 </div>
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <InputFormOpportunity editMode={editMode} setEditMode={setEditMode} opportunities={opportunities} setOpportunities={setOpportunities}
-                    OidToEdit={OidToEdit} setOidToEdit={setOidToEdit}
-                    OnameToEdit={OnameToEdit} setOnameToEdit={setOnameToEdit}
-                    OpartnerToEdit={OpartnerToEdit} setOpartnerToEdit={setOpartnerToEdit}
-                    OdistributorToEdit={OdistributorToEdit} setOdistributorToEdit={setOdistributorToEdit}
-                    OstageToEdit={OstageToEdit} setOstageToEdit={setOstageToEdit}
-                    OclosedateToEdit={OclosedateToEdit} setOclosedateToEdit={setOclosedateToEdit}
-                    OamountToEdit={OamountToEdit} setOamountToEdit={setOamountToEdit} />
-            </div>
-            <div className="row" style={{ width: '100%' }}>
-                <TableOpportunities editMode={editMode} setEditMode={setEditMode} opportunities={opportunities} setOpportunities={setOpportunities}
-                    OidToEdit={OidToEdit} setOidToEdit={setOidToEdit}
-                    OnameToEdit={OnameToEdit} setOnameToEdit={setOnameToEdit}
-                    OpartnerToEdit={OpartnerToEdit} setOpartnerToEdit={setOpartnerToEdit}
-                    OdistributorToEdit={OdistributorToEdit} setOdistributorToEdit={setOdistributorToEdit}
-                    OstageToEdit={OstageToEdit} setOstageToEdit={setOstageToEdit}
-                    OclosedateToEdit={OclosedateToEdit} setOclosedateToEdit={setOclosedateToEdit}
-                    OamountToEdit={OamountToEdit} setOamountToEdit={setOamountToEdit} />
-            </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <InputFormOpportunity />
+                </div>
+                <div className="row" style={{ width: '100%' }}>
+                    <TableOpportunities />
+                </div>
+            </OpportunityToEditContext.Provider>
         </>
     )
 };
