@@ -16,7 +16,7 @@ router.route('/')
     }) 
     .put((req, res) => {
         console.log('PUT: /opportunity');
-
+        var AccountAID = req.body.AccountAID;
         var Oid = req.body.Oid;
         var Oname = req.body.Oname;
         var Opartner = req.body.Opartner;
@@ -25,7 +25,15 @@ router.route('/')
         var Oclosedate = req.body.Oclosedate;
         var Oamount = req.body.Oamount;
 
-        crmdatabase.Opportunity.create({Oid: Oid, Oname: Oname, Opartner: Opartner, Odistributor: Odistributor, Ostage: Ostage, Oclosedate: Oclosedate, Oamount: Oamount}).then(() => {
+        crmdatabase.Opportunity.create({
+            AccountAID: AccountAID, 
+            Oid: Oid, 
+            Oname: Oname, 
+            Opartner: Opartner, 
+            Odistributor: Odistributor, 
+            Ostage: Ostage, 
+            Oclosedate: Oclosedate, 
+            Oamount: Oamount}).then(() => {
             res.sendStatus(200);
         }).catch(() => {
             res.sendStatus(400);
@@ -33,6 +41,7 @@ router.route('/')
     })
     .post((req, res) => {
         console.log('POST: /opportunity');
+        var AccountAID = req.body.AccountAID;
 
         var Oid = req.body.Oid;
         var Oname = req.body.Oname;

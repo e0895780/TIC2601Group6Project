@@ -104,7 +104,7 @@ function InputFormOpportunity() {
                     </tr>
 
                     <tr>
-                        <td width={'20%'}><b>Oid</b></td>
+                        <td><b>Oid</b></td>
                         <td>
                             <InputId label='Opportunity' value={OidToEdit} setValue={setOidToEdit} />
                         </td>
