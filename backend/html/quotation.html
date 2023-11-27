@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <title>Quotation</title>
+        <script type="text/javascript" src="scripts/quotation.js"></script>
+    </head>
+    <body onload="renderQuotationTable()">
+        <h1>
+            Quotation
+            <!-- HTML5 -->            
+        </h1>
+        <p>
+            <h2>Create/Update Quotation</h2>
+            <form id="quotationForm" onsubmit="return createUpdateQuotation()">
+                <table border="1" width="100%">
+                    <tbody>
+                        <tr>
+                            <td width="20%"><b>OrderID</b></td>
+                            <!-- HTML5 -->
+                            <td width="80%"><input type="text" placeholder="Enter Order id" required="true" id="OrderID" name="OrderID" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>ProductName</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="text" placeholder="Enter Product Name" required="true" id="ProductName" name="ProductName" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Client</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="text" placeholder="Enter Client" required="true" id="Client" name="Client" style="width: 300px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Price</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="number" min="0" step="0.1" id="Price" name="Price" style="width: 100px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Quantity</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="number" min="0" step="1" id="Quantity" name="Quantity" style="width: 100px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Discount</b></td>
+                            <!-- HTML5 -->
+                            <td><input type="number" min="0" step="0.01" id="Discount" name="Discount" style="width: 100px"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>OrderDate</b></td>
+                            <td>
+                                <!-- HTML5 -->
+                                <input type="date" id="OrderDate" name="OrderDate" required="true" min="1990-01-01" max="2023-12-01" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Status</b></td>
+                            <td>
+                                <select name="Status" id="Status">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center;"><input type="reset" value="Clear" /> <input type="submit" value="Create/Update" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </p>
+        <hr />
+        <p>
+            <h2>View All Quotation</h2>
+            <table id="quotationTable" border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>OrderID</th>
+                        <th>ProductName</th>
+                        <th>Client</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Discount</th>
+                        <th>OrderDate</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </p>
+        <hr />
+        <p>
+            <a href="./index.html">Home</a>
+        </p>
+    </body>
+</html>
