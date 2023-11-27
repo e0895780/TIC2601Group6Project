@@ -19,7 +19,7 @@ app.use('/account', account)
 const contact = require('./contact');
 app.use('/contact', contact)
 
-const contact = require('./quotation');
+const quotation = require('./quotation');
 app.use('/quotation', contact)
 
 app.listen(port, function () {
