@@ -206,9 +206,9 @@ Opportunity.belongsTo(Account,{onDelete:'CASCADE'});
 
 // Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage' });
 
-// 1-N relationship for Oppotunity table and quotation table
-Opportunity.hasMany(quotation);
-quotation.belongsTo(Opportunity);
+// 1-N relationship for Oppotunity table ansd quotation table
+Opportunity.hasMany(quotation,{onDelete:'CASCADE'});
+quotation.belongsTo(Opportunity,{onDelete:'CASCADE'});
 
 //1-N relationship for quotation table and Product table
 // quotation.hasMany(Product);
