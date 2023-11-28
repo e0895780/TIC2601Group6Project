@@ -133,7 +133,7 @@ const StageProbability = sequelize.define('StageProbability', {
 });
 
 //JiaXing Quotation Model (table)
-const quotation = sequelize.define('quotation', {
+const Quotation = sequelize.define('Quotation', {
 
     OrderID: {
         type: DataTypes.INTEGER,
@@ -205,12 +205,12 @@ Opportunity.belongsTo(Account,{onDelete:'CASCADE'});
 // Opportunity.belongsTo(StageProbability, {foreignKey: 'Ostage', targetKey: 'stage' });
 
 // 1-N relationship for Oppotunity table ansd quotation table
-Opportunity.hasMany(quotation,{onDelete:'CASCADE'});
-quotation.belongsTo(Opportunity,{onDelete:'CASCADE'});
+Opportunity.hasMany(Quotation,{onDelete:'CASCADE'});
+Quotation.belongsTo(Opportunity,{onDelete:'CASCADE'});
 
-//1-N relationship for quotation table and Product table
-// quotation.hasMany(Product);
-// Product.belongsTo(quotation);
+//1-N relationship for Quotation table and Product table
+// Quotation.hasMany(Product);
+// Product.belongsTo(Quotation);
 
 sequelize.sync({force:true});
 

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 import { QuotationToEditContext } from '../contexts/QuotationToEditContext';
 
@@ -24,7 +24,7 @@ axios.defaults.headers.put['Content-Type'] = 'application/json';
 function InputFormQuotation(){
     const{
         editMode, setEditMode, 
-        quotation, setquotation,
+        quotations, setquotations,
         OrderIDToEdit, setOrderIDToEdit, 
         ProductNameToEdit, setProductNameToEdit, 
         ClientToEdit, setClientToEdit, 
@@ -33,11 +33,18 @@ function InputFormQuotation(){
         DiscountToEdit, setDiscountToEdit, 
         OrderDateToEdit, setOrderDateToEdit, 
         StatusToEdit, setStatusToEdit,
-        reloadQuotation, setReloadQuotation
+        reloadQuotations, setReloadQuotations
     } = useContext(QuotationToEditContext);
 
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    // const location = useLocation();
+    // const queryParams = new URLSearchParams(location.search);
+    // const accountAIDFromURL = queryParams.get('accountAID');
+
+    // useEffect(() => {
+    //     if (accountAIDFromURL) {
+    //         setAccountAIDToEdit(accountAIDFromURL);
+    //     }
+    // }, [accountAIDFromURL]);
 
     function resetInputState() {
         setOrderIDToEdit('')
@@ -67,7 +74,7 @@ function InputFormQuotation(){
             }
             axios.put('http://localhost:3001/quotation', newQuotation).then((response) => {
                 resetInputState();
-                setReloadQuotation(!reloadQuotation)
+                setReloadQuotations(!reloadQuotations)
             })
         }
         else if (editMode === 'edit') {
@@ -84,7 +91,7 @@ function InputFormQuotation(){
             }
             axios.put('http://localhost:3001/quotation', quotationToEdit).then((response) => {
                 resetInputState();
-                setReloadQuotation(!reloadQuotation)
+                setReloadQuotations(!reloadQuotations)
                 setEditMode('create')
             })
         }
@@ -97,7 +104,7 @@ function InputFormQuotation(){
             <table border={'1'} style={{ width: '100%', position: "relative" }} >
                 <tbody>
                     <tr>
-                        <td width={'20%'}><b>Oid</b></td>
+                        <td width={'20%'}><b>OrderID</b></td>
                         <td>
                             <InputQOrid label='OrderID' value={OrderIDToEdit} setValue={setOrderIDToEdit} />
                         </td>
@@ -165,11 +172,11 @@ function InputFormQuotation(){
 
 
 /////////////////////////////////////////////////////////////Generates rows in the quotations table/////////////////////////////////////////////////////////////
-function TableRowsQuotation(){ 
+function TableRowsQuotations(){ 
     
     const {
         editMode, setEditMode, 
-        quotation, setquotation,
+        quotations, setquotations,
         OrderIDToEdit, setOrderIDToEdit, 
         ProductNameToEdit, setProductNameToEdit, 
         ClientToEdit, setClientToEdit, 
@@ -178,21 +185,21 @@ function TableRowsQuotation(){
         DiscountToEdit, setDiscountToEdit, 
         OrderDateToEdit, setOrderDateToEdit, 
         StatusToEdit, setStatusToEdit,
-        reloadQuotation, setReloadQuotation
+        reloadQuotations, setReloadQuotations
     } = useContext(QuotationToEditContext);
 
     useEffect(
         () => {
             axios.get('http://localhost:3001/quotation').then((response) => {
-                setquotation(response.data);
+                setquotations(response.data);
             })
-        }, [reloadQuotation]
+        }, [reloadQuotations]
     )
 
     function updateQuotation(event, OrderID) {
         setEditMode('edit')
 
-        var quotation = quotation.find(quotation => quotation.OrderID === OrderID)
+        var quotation = quotations.find(quotation => quotation.OrderID === OrderID)
         setOrderIDToEdit(quotation.OrderID)
         setProductNameToEdit(quotation.ProductName)
         setClientToEdit(quotation.Client)
@@ -204,14 +211,14 @@ function TableRowsQuotation(){
     }
 
     function deleteQuotation(event, OrderID) {
-        axios.delete('http://localhost:3001/quotation', { params: { 'Orderid': OrderID } }).then((response) => {
-            setReloadQuotation(!reloadQuotation)
+        axios.delete('http://localhost:3001/quotation', { params: { 'OrderID': OrderID } }).then((response) => {
+            setReloadQuotations(!reloadQuotations)
         })
     }
 
     return (
         <>
-            {quotation.map(
+            {quotations.map(
                 quotation =>
                     <tr key={quotation.OrderID}>
                         <td>{quotation.OrderID}</td>
@@ -239,13 +246,13 @@ function TableRowsQuotation(){
 
 
 /////////////////////////////////////////////////////////////Displays the quotations table header and utilizes TableRowsQuotation to render the rows/////////////////////////////////////////////////////////////
-function TableQuotation(){ 
+function TableQuotations(){ 
 
     return (
         <>
             <h3>View All Quotations</h3>
 
-            <table id={'quotationTable'} border={'1'} width={'100%'}>
+            <table id={'quotationsTable'} border={'1'} width={'100%'}>
                 <thead>
                     <tr>
                         <th>OrderID</th>
@@ -259,7 +266,7 @@ function TableQuotation(){
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRowsQuotation />
+                    <TableRowsQuotations />
                 </tbody>
             </table>
         </>
@@ -275,7 +282,7 @@ function TableQuotation(){
 export default function Quotation() {
 
     const [editMode, setEditMode] = useState('create')
-    const [quotation, setquotation] = useState([]);
+    const [quotations, setquotations] = useState([]);
     const [OrderIDToEdit, setOrderIDToEdit] = useState('')
     const [ProductNameToEdit, setProductNameToEdit] = useState('')
     const [ClientToEdit, setClientToEdit] = useState('')
@@ -285,13 +292,13 @@ export default function Quotation() {
     const [OrderDateToEdit, setOrderDateToEdit] = useState('')
     const [StatusToEdit, setStatusToEdit] = useState('')
 
-    const [reloadQuotation, setReloadQuotation] = useState(true)
+    const [reloadQuotations, setReloadQuotations] = useState(true)
 
     return (
         <>
             <QuotationToEditContext.Provider value={{
                 editMode, setEditMode, 
-                quotation, setquotation,
+                quotations, setquotations,
                 OrderIDToEdit, setOrderIDToEdit, 
                 ProductNameToEdit, setProductNameToEdit, 
                 ClientToEdit, setClientToEdit, 
@@ -301,7 +308,7 @@ export default function Quotation() {
                 OrderDateToEdit, setOrderDateToEdit, 
                 StatusToEdit, setStatusToEdit,
 
-                reloadQuotation, setReloadQuotation
+                reloadQuotations, setReloadQuotations
                 
             }}>
 
@@ -314,7 +321,7 @@ export default function Quotation() {
                     <InputFormQuotation />
                 </div>
                 <div className="row" style={{ width: '100%' }}>
-                    <TableQuotation/>
+                    <TableQuotations/>
                 </div>
             </QuotationToEditContext.Provider>
         </>

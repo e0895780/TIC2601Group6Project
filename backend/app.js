@@ -20,7 +20,7 @@ const contact = require('./contact');
 app.use('/contact', contact)
 
 const quotation = require('./quotation');
-app.use('/quotation', contact)
+app.use('/quotation', quotation)
 
 app.listen(port, function () {
     console.log(`Express app listening on port ${port}!`);

@@ -1,19 +1,19 @@
 const express = require('express')
-const sqlite3 = require('sqlite3').verbose()
+const sqlite3 = require('sqlite3')
 const { Sequelize, Op, Model, DataTypes } = require('sequelize');
 
+
+const crmdatabase = require('./crmdatabase');
+
 const router = express.Router()
-const crmdatabase = new sqlite3.Database('./crmdatabase')
-
-
 
 router.route('/')
     // Handle GET request for retrieving quotations
     .get((req, res) => {
         console.log('GET: /quotation');
 
-        crmdatabase.quotation.findAll().then((quotation) => {
-            res.send(quotation);
+        crmdatabase.Quotation.findAll().then((quotations) => {
+            res.send(quotations);
         })
     })
 
@@ -32,8 +32,17 @@ router.route('/')
         var OrderDate = req.body.OrderDate;
         var Status = req.body.Status;
 
-        crmdatabase.quotation.create({OrderID: OrderID, ProductName: ProductName, Client: Client, Price: Price, Quantity: Quantity, 
-            Discount: Discount, DealPrice: DealPrice, TotalPrice: TotalPrice, OrderDate: OrderDate, Status: Status}).then(() => {
+        crmdatabase.Quotation.create({
+            OrderID: OrderID, 
+            ProductName: ProductName, 
+            Client: Client, 
+            Price: Price, 
+            Quantity: Quantity, 
+            Discount: Discount, 
+            DealPrice: DealPrice, 
+            TotalPrice: TotalPrice, 
+            OrderDate: OrderDate, 
+            Status: Status}).then(() => {
             res.sendStatus(200);
         }).catch(() => {
             res.sendStatus(400);
@@ -52,7 +61,7 @@ router.route('/')
         var OrderDate = req.body.OrderDate;
         var Status = req.body.Status;
 
-        crmdatabase.quotation.findByPk(OrderID).then((quotation) => {
+        crmdatabase.Quotation.findByPk(OrderID).then((quotation) => {
             if(quotation === null) {
                 res.sendStatus(400);
             }
@@ -77,7 +86,7 @@ router.route('/')
 
         var OrderID = req.query.OrderID;
 
-        crmdatabase.quotation.findByPk(OrderID).then((quotation) => {
+        crmdatabase.Quotation.findByPk(OrderID).then((quotation) => {
             if(quotation === null) {
                 res.sendStatus(400);
             }
