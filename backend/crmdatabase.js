@@ -1,8 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-
 // create different table 
-
 const sequelize = new Sequelize(
     '', '', '',
     {
