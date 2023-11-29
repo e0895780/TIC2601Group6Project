@@ -7,6 +7,7 @@ import Account from "./pages/Account";
 import Contact from "./pages/Contact";
 import Opportunity from "./pages/Opportunity";
 import Quotation from "./pages/Quotation";
+import Product from "./pages/Product";
 
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="Contact" element={<Contact />} />
           <Route path="Opportunity" element={<Opportunity />} />
           <Route path="Quotation" element={<Quotation />} />
+          <Route path="Product" element={<Product />} />
         </Route>
       </Routes>
     </BrowserRouter>
