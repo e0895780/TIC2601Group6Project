@@ -191,6 +191,68 @@ const Quotation = sequelize.define('Quotation', {
 });
 
 
+// YG Product model (table)
+const Product = sequelize.define('Product', {
+    PSKUID: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    PDescription: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    PProductName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    PBrand: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    PManufacturingDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    PExpireDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    PDimensionalWeight: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+    },
+    PCategory: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    PStockQuantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 0
+          }
+    },
+    AccountAID: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    QOrid: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    OId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+}, {
+    freezeTableName: true
+});
+
+
+
+
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<-----------------  Below this line is for association of each entity ------------------------------------>>>>>>>>>>>>>>>>>
 
 
@@ -208,12 +270,28 @@ Opportunity.belongsTo(Account,{onDelete:'CASCADE'});
 Opportunity.hasMany(Quotation,{onDelete:'CASCADE'});
 Quotation.belongsTo(Opportunity,{onDelete:'CASCADE'});
 
-//1-N relationship for Quotation table and Product table
-// Quotation.hasMany(Product);
-// Product.belongsTo(Quotation);
+//1-N relationship for Quotation table and Product table, one product can have multiple quotationis
+Product.hasMany(Quotation, {
+    foreignKey: 'ProductName',
+    onDelete: 'CASCADE'
+});
+Quotation.belongsTo(Product, {
+    foreignKey: 'ProductName',
+    onDelete: 'CASCADE'
+});
+
+// multiple products can be obtained by multiple accounts
+Product.belongsToMany(Account, {through: 'ProductAccount'});
+Account.belongsToMany(Product, {through: 'ProductAccount'});
+
+// mulitple product could support multiple opportunities
+Product.belongsToMany(Opportunity, {through: 'ProductOpportunity'});
+Opportunity.belongsToMany(Product, {through: 'ProductOpportunity'});
+
+
 
 sequelize.sync({force:true});
 
 // console.log(Account);
 
-module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability, Quotation};
+module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability, Quotation, Product};
