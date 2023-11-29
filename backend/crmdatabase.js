@@ -216,4 +216,4 @@ sequelize.sync({force:true});
 
 // console.log(Account);
 
-module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability};
+module.exports = {sequelize, Account, Contacts, Opportunity, StageProbability, Quotation};
